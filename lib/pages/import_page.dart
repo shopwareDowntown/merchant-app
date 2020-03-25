@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 
 class ImportPage extends StatefulWidget {
@@ -23,6 +26,8 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeStock = FocusNode();
   final _focusNodeTax = FocusNode();
 
+  File _image;
+
   @override
   initState() {
     super.initState();
@@ -36,108 +41,134 @@ class _ImportPageState extends State<ImportPage> {
       appBar: new AppBar(
         title: new Text('Import Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: new Column(
-            children: <Widget>[
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: localization.translate('productName'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: new Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productName'),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodeName,
+                  onFieldSubmitted: (term) {
+                    _fieldFocusChange(
+                        context, _focusNodeName, _focusNodeProductNumber);
+                  },
                 ),
-                textInputAction: TextInputAction.next,
-                validator: _notEmptyValidation,
-                focusNode: _focusNodeName,
-                onFieldSubmitted: (term) {
-                  _fieldFocusChange(
-                      context, _focusNodeName, _focusNodeProductNumber);
-                },
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      controller: _productNumberController,
-                      decoration: InputDecoration(
-                        labelText: localization.translate('productNumber'),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        controller: _productNumberController,
+                        decoration: InputDecoration(
+                          labelText: localization.translate('productNumber'),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: _notEmptyValidation,
+                        focusNode: _focusNodeProductNumber,
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(context, _focusNodeProductNumber,
+                              _focusNodeDescription);
+                        },
                       ),
-                      textInputAction: TextInputAction.next,
-                      validator: _notEmptyValidation,
-                      focusNode: _focusNodeProductNumber,
-                      onFieldSubmitted: (term) {
-                        _fieldFocusChange(context, _focusNodeProductNumber,
-                            _focusNodeDescription);
-                      },
                     ),
+                    RaisedButton(
+                      onPressed: scan,
+                      child: Text(localization.translate('scan')),
+                    ),
+                  ],
+                ),
+                _image != null
+                    ? ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.height / 10),
+                        child: Center(
+                          child: Image.file(
+                            _image,
+                          ),
+                        ),
+                      )
+                    : Container(),
+                RaisedButton(
+                  onPressed: getImage,
+                  child: Text(localization.translate('uploadImage')),
+                ),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productDescription'),
                   ),
-                  RaisedButton(
-                    onPressed: scan,
-                    child: Text(localization.translate('scan')),
+                  textInputAction: TextInputAction.next,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodeDescription,
+                  onFieldSubmitted: (term) {
+                    _fieldFocusChange(
+                        context, _focusNodeDescription, _focusNodePrice);
+                  },
+                ),
+                TextFormField(
+                  controller: _priceController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productPrice'),
                   ),
-                ],
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: localization.translate('productDescription'),
+                  textInputAction: TextInputAction.next,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodePrice,
+                  onFieldSubmitted: (term) {
+                    _fieldFocusChange(
+                        context, _focusNodePrice, _focusNodeStock);
+                  },
                 ),
-                textInputAction: TextInputAction.next,
-                validator: _notEmptyValidation,
-                focusNode: _focusNodeDescription,
-                onFieldSubmitted: (term) {
-                  _fieldFocusChange(
-                      context, _focusNodeDescription, _focusNodePrice);
-                },
-              ),
-              TextFormField(
-                controller: _priceController,
-                decoration: InputDecoration(
-                  labelText: localization.translate('productPrice'),
+                TextFormField(
+                  controller: _stockController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productStock'),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodeStock,
+                  onFieldSubmitted: (term) {
+                    _fieldFocusChange(context, _focusNodeStock, _focusNodeTax);
+                  },
                 ),
-                textInputAction: TextInputAction.next,
-                validator: _notEmptyValidation,
-                focusNode: _focusNodePrice,
-                onFieldSubmitted: (term) {
-                  _fieldFocusChange(context, _focusNodePrice, _focusNodeStock);
-                },
-              ),
-              TextFormField(
-                controller: _stockController,
-                decoration: InputDecoration(
-                  labelText: localization.translate('productStock'),
+                TextFormField(
+                  controller: _taxController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productTax'),
+                  ),
+                  textInputAction: TextInputAction.done,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodeTax,
+                  onFieldSubmitted: (term) {
+                    _focusNodeTax.unfocus();
+                    save();
+                  },
                 ),
-                textInputAction: TextInputAction.next,
-                validator: _notEmptyValidation,
-                focusNode: _focusNodeStock,
-                onFieldSubmitted: (term) {
-                  _fieldFocusChange(context, _focusNodeStock, _focusNodeTax);
-                },
-              ),
-              TextFormField(
-                controller: _taxController,
-                decoration: InputDecoration(
-                  labelText: localization.translate('productTax'),
+                RaisedButton(
+                  child: Text(localization.translate('save')),
+                  onPressed: save,
                 ),
-                textInputAction: TextInputAction.done,
-                validator: _notEmptyValidation,
-                focusNode: _focusNodeTax,
-                onFieldSubmitted: (term) {
-                  _focusNodeTax.unfocus();
-                  save();
-                },
-              ),
-              RaisedButton(
-                child: Text(localization.translate('save')),
-                onPressed: save,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future getImage() async {
+    final image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
   }
 
   void save() async {
@@ -146,6 +177,7 @@ class _ImportPageState extends State<ImportPage> {
       return;
     }
 
+    _formKey.currentState.save();
     // todo: make api call
   }
 

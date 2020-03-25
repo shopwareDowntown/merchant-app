@@ -17,5 +17,6 @@
   "productPrice": "Preis",
   "productStock": "Lagerbestand",
   "productTax": "Steuersatz",
-  "productDescription": "Beschreibung"
+  "productDescription": "Beschreibung",
+  "uploadImage": "Bild hochladen"
 }

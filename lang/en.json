@@ -17,5 +17,6 @@
   "productPrice": "Price",
   "productStock": "In Stock",
   "productTax": "Taxrate",
-  "productDescription": "Description"
+  "productDescription": "Description",
+  "uploadImage": "Upload an Image"
 }
