@@ -23,6 +23,8 @@ class LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context);
+
     return FutureBuilder(
       future: _isLoggedIn,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -39,7 +41,7 @@ class LoginState extends State<LoginPage> {
         return new MaterialApp(
           home: new Scaffold(
               appBar: new AppBar(
-                title: new Text(AppLocalizations.of(context).translate("loginPage.title")),
+                title: new Text(localization.translate("loginPage.title")),
               ),
               body: new Center(
                 child: new Column(
@@ -52,16 +54,16 @@ class LoginState extends State<LoginPage> {
                               TextFormField(
                                 decoration: InputDecoration(
                                     hintText: "htps://my-store.shopware.store",
-                                    labelText: AppLocalizations.of(context).translate("loginPage.shopUrlField.label")
+                                    labelText: localization.translate("loginPage.shopUrlField.label")
                                 ),
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return AppLocalizations.of(context).translate("loginPage.shopUrlField.validationEmpty");
+                                    return localization.translate("loginPage.shopUrlField.validationEmpty");
                                   }
 
                                   bool _validURL = Uri.parse(value).isAbsolute;
                                   if (!_validURL) {
-                                    return AppLocalizations.of(context).translate("loginPage.shopUrlField.validationInvalid");
+                                    return localization.translate("loginPage.shopUrlField.validationInvalid");
                                   }
 
                                   return null;
@@ -72,11 +74,11 @@ class LoginState extends State<LoginPage> {
                               ),
                               TextFormField(
                                 decoration: InputDecoration(
-                                    labelText: AppLocalizations.of(context).translate("loginPage.usernameField.label")
+                                    labelText: localization.translate("loginPage.usernameField.label")
                                 ),
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return AppLocalizations.of(context).translate("loginPage.usernameField.validationEmpty");
+                                    return localization.translate("loginPage.usernameField.validationEmpty");
                                   }
 
                                   return null;
@@ -87,11 +89,11 @@ class LoginState extends State<LoginPage> {
                               ),
                               TextFormField(
                                 decoration: InputDecoration(
-                                    labelText: AppLocalizations.of(context).translate("loginPage.passwordField.label")
+                                    labelText: localization.translate("loginPage.passwordField.label")
                                 ),
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return AppLocalizations.of(context).translate("loginPage.passwordField.validationEmpty");
+                                    return localization.translate("loginPage.passwordField.validationEmpty");
                                   }
 
                                   return null;
@@ -113,7 +115,7 @@ class LoginState extends State<LoginPage> {
                                             if (!wasSuccessful) {
                                               Scaffold
                                                   .of(context)
-                                                  .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).translate("loginPage.loginError"))));
+                                                  .showSnackBar(SnackBar(content: Text(localization.translate("loginPage.loginError"))));
 
                                               return;
                                             }
@@ -123,7 +125,7 @@ class LoginState extends State<LoginPage> {
                                           });
                                     }
                                   },
-                                  child: Text(AppLocalizations.of(context).translate("loginPage.loginButtonLabel")),
+                                  child: Text(localization.translate("loginPage.loginButtonLabel")),
                                 ),
                               ),
                             ]
