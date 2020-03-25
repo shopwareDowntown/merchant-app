@@ -105,27 +105,31 @@ class LoginState extends State<LoginPage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                                child: RaisedButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
+                                child: Builder(
+                                  builder: (BuildContext context) {
+                                    return RaisedButton(
+                                      onPressed: () {
+                                        if (_formKey.currentState.validate()) {
+                                          _formKey.currentState.save();
 
-                                      _loginService.login(_shopUrl, _username, _password).then(
-                                              (wasSuccessful) {
-                                            if (!wasSuccessful) {
-                                              Scaffold
-                                                  .of(context)
-                                                  .showSnackBar(SnackBar(content: Text(localization.translate("loginError"))));
+                                          _loginService.login(_shopUrl, _username, _password).then(
+                                                  (wasSuccessful) {
+                                                if (!wasSuccessful) {
+                                                  Scaffold
+                                                      .of(context)
+                                                      .showSnackBar(SnackBar(content: Text(localization.translate("loginError"))));
 
-                                              return;
-                                            }
+                                                  return;
+                                                }
 
-                                            Navigator.push(
-                                              context, MaterialPageRoute(builder: (context) => ImportPage()));
-                                          });
-                                    }
+                                                Navigator.pushReplacement(
+                                                    context, MaterialPageRoute(builder: (context) => ImportPage()));
+                                              });
+                                        }
+                                      },
+                                      child: Text(localization.translate("loginButtonLabel")),
+                                    );
                                   },
-                                  child: Text(localization.translate("loginButtonLabel")),
                                 ),
                               ),
                             ]
