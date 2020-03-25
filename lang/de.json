@@ -9,5 +9,13 @@
   "passwordLabel": "Passwort",
   "passwordValidationEmpty": "Bitte gebe dein Passwort an.",
   "loginButtonLabel": "Login",
-  "loginError": "Ungültige Anmeldedaten"
+  "requiredField": "Pflichtfeld",
+  "save": "Speichern",
+  "scan": "Code scannen",
+  "productName": "Artikel Name",
+  "productNumber": "Artikel Nummer",
+  "productPrice": "Preis",
+  "productStock": "Lagerbestand",
+  "productTax": "Steuersatz",
+  "productDescription": "Beschreibung"
 }
