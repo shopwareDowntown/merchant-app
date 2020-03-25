@@ -1,10 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
-  Future<bool> login(String shopUrl, String username, String password) async {
+  Future<bool> login(
+    BuildContext context,
+    String shopUrl,
+    String username,
+    String password,
+  ) async {
     while (shopUrl.endsWith("/")) {
-      shopUrl = shopUrl.substring(0, shopUrl.length -1);
+      shopUrl = shopUrl.substring(0, shopUrl.length - 1);
     }
 
     try {
@@ -23,6 +31,12 @@ class LoginService {
         prefs.setString("accessToken", response.data["access_token"]);
         prefs.setString("refreshToken", response.data["refresh_token"]);
 
+        Provider.of<AccessDataChangeNotifier>(context, listen: false).init(
+          shopUrl: shopUrl,
+          accessToken: response.data["access_token"],
+          refreshToken: response.data["refresh_token"],
+        );
+
         return true;
       }
 
@@ -32,8 +46,20 @@ class LoginService {
     }
   }
 
-  Future<bool> isLoggedIn() async {
+  Future<bool> isLoggedIn(BuildContext context) async {
+    final accessData =
+        Provider.of<AccessDataChangeNotifier>(context, listen: false);
+    if (accessData.hasData && accessData.isLoggedIn) {
+      return true;
+    }
+
     final prefs = await SharedPreferences.getInstance();
+
+    Provider.of<AccessDataChangeNotifier>(context, listen: false).init(
+      shopUrl: prefs.getString('shopUrl'),
+      accessToken: prefs.getString("access_token"),
+      refreshToken: prefs.getString("refresh_token"),
+    );
 
     return prefs.containsKey("accessToken");
   }

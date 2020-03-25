@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:product_import_app/service/app_localizations.dart';
+import 'package:product_import_app/service/shopware_service.dart';
 
 class ImportPage extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
   final _focusNodeTax = FocusNode();
+  String _errorText;
 
   File _image;
 
@@ -151,6 +154,7 @@ class _ImportPageState extends State<ImportPage> {
                     save();
                   },
                 ),
+                _errorText != null ? Text(_errorText) : Container(),
                 RaisedButton(
                   child: Text(localization.translate('save')),
                   onPressed: save,
@@ -177,8 +181,27 @@ class _ImportPageState extends State<ImportPage> {
       return;
     }
 
+    setState(() {
+      _errorText = null;
+    });
+
     _formKey.currentState.save();
-    // todo: make api call
+    try {
+      await ShopwareService().uploadProduct(
+        context,
+        name: _nameController.text,
+        number: _productNumberController.text,
+        price: num.parse(_priceController.text),
+        taxRate: num.parse(_taxController.text),
+        stock: int.parse(_stockController.text),
+        description: _descriptionController.text,
+      );
+      // success
+    } on DioError catch (e) {
+      setState(() {
+        _errorText = e.response.data.toString();
+      });
+    }
   }
 
   void _fieldFocusChange(
