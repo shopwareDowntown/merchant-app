@@ -1,5 +1,4 @@
 {
-  "buttonPushed": "So hast den Button so oft gedrückt:",
   "loginPageTitle": "Login",
   "shopUrlLabel": "Your shop url",
   "shopUrlValidationEmpty": "Please enter a shop url.",
@@ -9,5 +8,15 @@
   "passwordLabel": "Password",
   "passwordValidationEmpty": "Please enter your username.",
   "loginButtonLabel": "Login",
-  "loginError": "Invalid credentitals"
+  "loginError": "Invalid credentitals",
+  "requiredField": "Required field",
+  "save": "Sabe",
+  "scan": "Scan barcode",
+  "productName": "Product Name",
+  "productNumber": "Product Nummer",
+  "productPrice": "Price",
+  "productStock": "In Stock",
+  "productTax": "Taxrate",
+  "productDescription": "Description",
+  "uploadImage": "Upload an Image"
 }

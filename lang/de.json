@@ -1,5 +1,4 @@
 {
-  "buttonPushed": "So hast den Button so oft gedrückt:",
   "loginPageTitle": "Login",
   "shopUrlLabel": "Deine Shop-Url",
   "shopUrlValidationEmpty": "Bitte gebe deine Shop-Url an.",
@@ -9,5 +8,15 @@
   "passwordLabel": "Passwort",
   "passwordValidationEmpty": "Bitte gebe dein Passwort an.",
   "loginButtonLabel": "Login",
-  "loginError": "Ungültige Anmeldedaten"
+  "loginError": "Ungültige Anmeldedaten",
+  "requiredField": "Pflichtfeld",
+  "save": "Speichern",
+  "scan": "Code scannen",
+  "productName": "Artikel Name",
+  "productNumber": "Artikel Nummer",
+  "productPrice": "Preis",
+  "productStock": "Lagerbestand",
+  "productTax": "Steuersatz",
+  "productDescription": "Beschreibung",
+  "uploadImage": "Bild hochladen"
 }
