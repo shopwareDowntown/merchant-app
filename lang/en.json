@@ -1,21 +1,13 @@
 {
-  "buttonPushed": "You have pushed the button this many times:",
-  "loginPage": {
-    "title": "Login",
-    "shopUrlField": {
-      "label": "Your shop url",
-      "validationEmpty": "Please enter a shop url.",
-      "validationNotValid": "Please enter a valid url."
-    },
-    "usernameField": {
-      "label": "Username",
-      "validationEmpty": "Please enter your username."
-    },
-    "passwordField": {
-      "label": "Paasword",
-      "validationEmpty": "Please enter your username."
-    },
-    "loginButtonLabel": "Login",
-    "loginError": "Invalid credentitals"
-  }
+  "buttonPushed": "So hast den Button so oft gedrückt:",
+  "loginPageTitle": "Login",
+  "shopUrlLabel": "Your shop url",
+  "shopUrlValidationEmpty": "Please enter a shop url.",
+  "shopUrlValidationNotValid": "Please enter a valid url.",
+  "usernameLabel": "Username",
+  "usernameValidationEmpty": "Please enter your username.",
+  "passwordLabel": "Password",
+  "passwordValidationEmpty": "Please enter your username.",
+  "loginButtonLabel": "Login",
+  "loginError": "Invalid credentitals"
 }

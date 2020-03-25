@@ -1,21 +1,13 @@
 {
   "buttonPushed": "So hast den Button so oft gedrückt:",
-  "loginPage": {
-    "title": "Login",
-    "shopUrlField": {
-      "label": "Deine Shop-Url",
-      "validationEmpty": "Bitte gebe deine Shop-Url an.",
-      "validationNotValid": "Bitte gebe eine valide Url an."
-    },
-    "usernameField": {
-      "label": "Benutzername",
-      "validationEmpty": "Bitte gebe deinen Benutzernamen an."
-    },
-    "passwordField": {
-      "label": "Passwort",
-      "validationEmpty": "Bitte gebe dein Passwort an."
-    },
-    "loginButtonLabel": "Login",
-    "loginError": "Ungültige Anmeldedaten"
-  }
+  "loginPageTitle": "Login",
+  "shopUrlLabel": "Deine Shop-Url",
+  "shopUrlValidationEmpty": "Bitte gebe deine Shop-Url an.",
+  "shopUrlValidationNotValid": "Bitte gebe eine valide Url an.",
+  "usernameLabel": "Benutzername",
+  "usernameValidationEmpty": "Bitte gebe deinen Benutzernamen an.",
+  "passwordLabel": "Passwort",
+  "passwordValidationEmpty": "Bitte gebe dein Passwort an.",
+  "loginButtonLabel": "Login",
+  "loginError": "Ungültige Anmeldedaten"
 }
