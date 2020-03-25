@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/pages/import_page.dart';
+import 'package:product_import_app/pages/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Material(
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+        child: LoginPage(),
       ),
     );
   }
@@ -101,7 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body:
+      Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
