@@ -168,7 +168,13 @@ class _ImportPageState extends State<ImportPage> {
   }
 
   Future getImage() async {
-    final image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final image = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      // todo max width/height/quality?
+      maxWidth: 300,
+      maxHeight: 300,
+      imageQuality: 30,
+    );
 
     setState(() {
       _image = image;
@@ -195,6 +201,7 @@ class _ImportPageState extends State<ImportPage> {
         taxRate: num.parse(_taxController.text),
         stock: int.parse(_stockController.text),
         description: _descriptionController.text,
+        image: _image,
       );
       // success
     } on DioError catch (e) {
