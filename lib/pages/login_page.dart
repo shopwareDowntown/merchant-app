@@ -47,8 +47,10 @@ class LoginState extends State<LoginPage> {
           ),
           body: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
+                  margin: EdgeInsets.symmetric(horizontal: 42),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -77,6 +79,7 @@ class LoginState extends State<LoginPage> {
                             _shopUrl = value.trim();
                           },
                         ),
+                        SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
                               labelText:
@@ -93,6 +96,7 @@ class LoginState extends State<LoginPage> {
                             _username = value.trim();
                           },
                         ),
+                        SizedBox(height: 20),
                         TextFormField(
                           decoration: InputDecoration(
                               labelText:
@@ -110,46 +114,53 @@ class LoginState extends State<LoginPage> {
                           },
                           obscureText: true,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Builder(
-                            builder: (BuildContext context) {
-                              return RaisedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              child: Builder(
+                                builder: (BuildContext context) {
+                                  return RaisedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        _formKey.currentState.save();
 
-                                    _loginService
-                                        .login(context, _shopUrl, _username,
-                                            _password)
-                                        .then((wasSuccessful) {
-                                      if (!wasSuccessful) {
-                                        Scaffold.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              localization
-                                                  .translate("loginError"),
+                                        _loginService
+                                            .login(context, _shopUrl, _username,
+                                                _password)
+                                            .then((wasSuccessful) {
+                                          if (!wasSuccessful) {
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  localization
+                                                      .translate("loginError"),
+                                                ),
+                                              ),
+                                            );
+
+                                            return;
+                                          }
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ImportPage(),
                                             ),
-                                          ),
-                                        );
-
-                                        return;
+                                          );
+                                        });
                                       }
-
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ImportPage(),
-                                        ),
-                                      );
-                                    });
-                                  }
+                                    },
+                                    child: Text(localization
+                                        .translate("loginButtonLabel")),
+                                  );
                                 },
-                                child: Text(
-                                    localization.translate("loginButtonLabel")),
-                              );
-                            },
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

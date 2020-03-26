@@ -41,16 +41,45 @@ class MyApp extends StatelessWidget {
           return supportedLocales.first;
         },
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
+          primaryColor: Color(0xFF0552B5),
+          accentColor: Color(0xFF189EFF),
+          primaryTextTheme: TextTheme(
+            title: TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFD1D9E0)),
+            ),
+            labelStyle: TextStyle(
+              fontSize: 14,
+              color: Color(0xFFB3BFCC),
+            ),
+            hintStyle: TextStyle(
+              fontSize: 14,
+              color: Color(0xFFB3BFCC),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).accentColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFDE294C)),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFDE294C)),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+          buttonTheme: ButtonThemeData(
+              height: 40,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+              ),
+              buttonColor: Theme.of(context).accentColor,
+              colorScheme: ColorScheme.dark()),
         ),
         home: Material(
           child: LoginPage(),
