@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AccessDataChangeNotifier(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AccessDataChangeNotifier()),
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         localizationsDelegates: [

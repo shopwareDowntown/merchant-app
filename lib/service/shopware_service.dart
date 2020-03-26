@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:product_import_app/model/simple_product.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class ShopwareService {
   static ShopwareService _instance;
@@ -23,88 +22,61 @@ class ShopwareService {
     return _instance;
   }
 
-  Future uploadProduct(
-    BuildContext context, {
-    @required String name,
-    @required String number,
-    @required num price,
-    String description,
-    @required num taxRate,
-    @required int stock,
-    File image,
-  }) async {
+  Future<List<SimpleProduct>> fetchProducts(BuildContext context) async {
     final accessData = Provider.of<AccessDataChangeNotifier>(
       context,
       listen: false,
     );
-    String mediaId;
 
-    // todo handle invalid token? or ignore cause merchant api use basic auth with username and password
-
-    Map data = {
-      'active': true,
-      'stock': stock,
-      'taxId': "c9f0c92c0f9147a989fbe7b000b4fdc9", // todo fetch correct
-      'name': name,
-      'description': description,
-      'productNumber': number,
-      'price': [
-        {
-          'currencyId':
-              'b7d2554b0ce847cd82f3ac9bd1c0dfca', // todo fetch correct
-          'net': price,
-          'linked': true,
-          'gross': price,
-        }
-      ],
-      'categories': [
-        {
-          'id': '4350dffd5ddc4920adb92e57c7ad0f7f' // todo fetch correct
-        },
-      ],
-      'visibilities': [
-        {
-          'salesChannelId':
-              '900c93394f094b3cb41604788eba7638', // todo fetch correct
-          'visibility': 30,
-        }
-      ],
-    };
-
-    if (image != null) {
-      mediaId = Uuid().v4().replaceAll('-', '');
-      final productMediaId = Uuid().v4().replaceAll('-', '');
-      data['media'] = [
-        {
-          'id': productMediaId,
-          'media': {
-            'id': mediaId,
-          },
-        }
-      ];
-
-      data['coverId'] = productMediaId;
-    }
-
-    await dio.post(
-      "${accessData.shopUrl}/api/v1/product",
-      data: data,
+    final response = await dio.get(
+      "${accessData.shopUrl}/api/v1/product?associations[cover][]",
       options: Options(
         contentType: 'application/json',
         headers: {
-          'Accept': 'application/vnd.api+json',
+          'Accept': 'application/json',
           "Authorization": "Bearer ${accessData.accessToken}",
         },
       ),
     );
 
-    if (mediaId != null) {
+    List data = response.data['data'];
+
+    Provider.of<ProductProvider>(context, listen: false).setProducts(
+      data.map((productMap) => SimpleProduct.fromJson(productMap)).toList(),
+    );
+
+    return [];
+  }
+
+  Future uploadProduct(
+    BuildContext context,
+    SimpleProduct product,
+  ) async {
+    final accessData = Provider.of<AccessDataChangeNotifier>(
+      context,
+      listen: false,
+    );
+    await dio.request(
+      "${accessData.shopUrl}/api/v1/product${!product.isNew ? '/${product.id}' : ''}",
+      data: product.toMap(),
+      options: Options(
+        method: product.isNew ? 'POST' : 'PATCH',
+        contentType: 'application/json',
+        headers: {
+          'Accept': 'application/json',
+          "Authorization": "Bearer ${accessData.accessToken}",
+        },
+      ),
+    );
+
+    if (product.hasMedia) {
+      final image = product.image;
       final extension = image.path.split('.').last;
       final postData = image.openRead();
       final length = (await image.readAsBytes()).length;
 
       await dio.post(
-        "${accessData.shopUrl}/api/v1/_action/media/$mediaId/upload",
+        "${accessData.shopUrl}/api/v1/_action/media/${product.mediaId}/upload",
         data: postData,
         queryParameters: {
           'extension': extension,
@@ -114,11 +86,13 @@ class ShopwareService {
           contentType: 'image/$extension',
           headers: {
             Headers.contentLengthHeader: length,
-            Headers.acceptHeader: 'application/vnd.api+json',
+            Headers.acceptHeader: 'application/json',
             "Authorization": "Bearer ${accessData.accessToken}",
           },
         ),
       );
     }
+
+    Provider.of<ProductProvider>(context, listen: false).addProduct(product);
   }
 }

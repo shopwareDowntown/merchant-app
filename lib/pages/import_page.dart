@@ -5,19 +5,24 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:product_import_app/pages/login_page.dart';
+import 'package:product_import_app/model/simple_product.dart';
+import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/ean.dart';
-import 'package:product_import_app/service/login.dart';
 import 'package:product_import_app/service/shopware_service.dart';
+import 'package:product_import_app/widgets/default_drawer.dart';
+import 'package:provider/provider.dart';
 
 class ImportPage extends StatefulWidget {
   @override
   _ImportPageState createState() => _ImportPageState();
+
+  final String id;
+
+  ImportPage({this.id});
 }
 
 class _ImportPageState extends State<ImportPage> {
-  LoginService _loginService = LoginService();
   EanService eanService = EanService();
 
   final _formKey = GlobalKey<FormState>();
@@ -40,6 +45,23 @@ class _ImportPageState extends State<ImportPage> {
   @override
   initState() {
     super.initState();
+    if (widget.id != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final productProvider =
+            Provider.of<ProductProvider>(context, listen: false);
+        final SimpleProduct product = productProvider.getById(widget.id);
+
+        _nameController.text = product.name ?? '';
+        _productNumberController.text = product.number ?? '';
+        _descriptionController.text = product.description ?? '';
+        _stockController.text = product.stock?.toString() ?? '';
+        _priceController.text = product.price?.toString() ?? '';
+        _taxController.text = product.tax?.toString() ?? '';
+        setState(() {
+          _image = product.image;
+        });
+      });
+    }
   }
 
   @override
@@ -50,25 +72,7 @@ class _ImportPageState extends State<ImportPage> {
       appBar: AppBar(
         title: Text(localization.translate("importPageTitle")),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text(localization.translate("logoutButtonLabel")),
-              leading: Icon(Icons.exit_to_app),
-              onTap: () {
-                _loginService.logout(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+      drawer: DefaultDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -218,15 +222,21 @@ class _ImportPageState extends State<ImportPage> {
 
     _formKey.currentState.save();
     try {
+      final productProvider =
+          Provider.of<ProductProvider>(context, listen: false);
+      final product = (productProvider.getById(widget.id) ?? SimpleProduct());
+      product
+        ..id = widget.id
+        ..name = _nameController.text
+        ..number = _productNumberController.text
+        ..price = num.parse(_priceController.text)
+        ..stock = int.parse(_stockController.text)
+        ..description = _descriptionController.text
+        ..image = _image;
+
       await ShopwareService().uploadProduct(
         context,
-        name: _nameController.text,
-        number: _productNumberController.text,
-        price: num.parse(_priceController.text),
-        taxRate: num.parse(_taxController.text),
-        stock: int.parse(_stockController.text),
-        description: _descriptionController.text,
-        image: _image,
+        product,
       );
       // success
     } on DioError catch (e) {
