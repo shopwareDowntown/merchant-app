@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
 import 'package:product_import_app/notifier/product_provider.dart';
-import 'package:product_import_app/pages/login_page.dart';
+import 'package:product_import_app/pages/start_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -45,48 +45,67 @@ class MyApp extends StatelessWidget {
           return supportedLocales.first;
         },
         theme: ThemeData(
-          primaryColor: Color(0xFF0552B5),
-          accentColor: Color(0xFF189EFF),
-          primaryTextTheme: TextTheme(
-            title: TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+            primaryColor: Color(0xFF0552B5),
+            accentColor: Color(0xFF189EFF),
+            primaryTextTheme: TextTheme(
+              title: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              headline: TextStyle(
+                fontWeight: FontWeight.bold,
+                height: 22 / 18,
+                fontSize: 18,
+                letterSpacing: 0.1,
+                color: Color(0xFF4F4F4F),
+              ),
             ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFD1D9E0)),
+            inputDecorationTheme: InputDecorationTheme(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD1D9E0)),
+              ),
+              labelStyle: TextStyle(
+                fontSize: 14,
+                color: Color(0xFFB3BFCC),
+              ),
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: Color(0xFFB3BFCC),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).accentColor),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFDE294C)),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFDE294C)),
+              ),
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
-            labelStyle: TextStyle(
-              fontSize: 14,
-              color: Color(0xFFB3BFCC),
+            dialogTheme: DialogTheme(
+              contentTextStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                height: 22 / 18,
+                letterSpacing: 0.1,
+              ),
             ),
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: Color(0xFFB3BFCC),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).accentColor),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFDE294C)),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFDE294C)),
-            ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-          buttonTheme: ButtonThemeData(
+            buttonTheme: ButtonThemeData(
               height: 40,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(4)),
               ),
+              disabledColor: Color(0xFF607182),
               buttonColor: Theme.of(context).accentColor,
-              colorScheme: ColorScheme.dark()),
-        ),
+              colorScheme: ColorScheme.dark(),
+            ),
+            dividerColor: Color(0xC0C4C8),
+            backgroundColor: Colors.white),
         home: Material(
-          child: LoginPage(),
+          child: StartPage(),
         ),
       ),
     );

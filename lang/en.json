@@ -11,6 +11,7 @@
   "loginError": "You could not be logged in. Make sure that your login credentials are correct.",
   "requiredField": "Required field",
   "save": "Save",
+  "close": "Close",
   "scan": "Scan barcode",
   "productName": "Product Name",
   "productNumber": "Product Nummer",
@@ -23,5 +24,9 @@
   "productListPageTitle": "Products",
   "logoutButtonLabel": "Logout",
   "importProducts": "Import products",
-  "modifyProducts": "Modify products"
+  "modifyProducts": "Modify products",
+  "numberOnlyField": "Invalid Value",
+  "productWillBeImported": "The Product will be imported ... ",
+  "successfulImport": "The Product was successfully imported!",
+  "createAdditional": "Import additional Product"
 }

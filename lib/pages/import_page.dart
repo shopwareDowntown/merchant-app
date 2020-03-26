@@ -41,10 +41,13 @@ class _ImportPageState extends State<ImportPage> {
   String _errorText;
 
   File _image;
+  String id;
 
   @override
   initState() {
     super.initState();
+    this.id = widget.id;
+
     if (widget.id != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final productProvider =
@@ -75,11 +78,50 @@ class _ImportPageState extends State<ImportPage> {
       drawer: DefaultDrawer(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(42.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
+                TextFormField(
+                  controller: _productNumberController,
+                  decoration: InputDecoration(
+                    labelText: localization.translate('productNumber'),
+                    suffixIcon: GestureDetector(
+                      onTap: scan,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.horizontal(
+                          right: Radius.circular(6),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.all(1),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                color: Color(0xFFD1D9E0),
+                              ),
+                            ),
+                            color: Color(0xFFF9FAFB),
+                          ),
+                          child: Icon(Icons.camera), //TODO: Icon?
+                        ),
+                      ),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: _notEmptyValidation,
+                  focusNode: _focusNodeProductNumber,
+                  onFieldSubmitted: (term) {
+                    _fieldFocusChange(
+                      context,
+                      _focusNodeProductNumber,
+                      _focusNodeName,
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -90,54 +132,22 @@ class _ImportPageState extends State<ImportPage> {
                   focusNode: _focusNodeName,
                   onFieldSubmitted: (term) {
                     _fieldFocusChange(
-                        context, _focusNodeName, _focusNodeProductNumber);
+                      context,
+                      _focusNodeName,
+                      _focusNodeDescription,
+                    );
                   },
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        controller: _productNumberController,
-                        decoration: InputDecoration(
-                          labelText: localization.translate('productNumber'),
-                        ),
-                        textInputAction: TextInputAction.next,
-                        validator: _notEmptyValidation,
-                        focusNode: _focusNodeProductNumber,
-                        onFieldSubmitted: (term) {
-                          _fieldFocusChange(context, _focusNodeProductNumber,
-                              _focusNodeDescription);
-                        },
-                      ),
-                    ),
-                    RaisedButton(
-                      onPressed: scan,
-                      child: Text(localization.translate('scan')),
-                    ),
-                  ],
-                ),
-                _image != null
-                    ? ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.height / 10),
-                        child: Center(
-                          child: Image.file(
-                            _image,
-                          ),
-                        ),
-                      )
-                    : Container(),
-                RaisedButton(
-                  onPressed: getImage,
-                  child: Text(localization.translate('uploadImage')),
+                SizedBox(
+                  height: 20,
                 ),
                 TextFormField(
                   controller: _descriptionController,
                   decoration: InputDecoration(
                     labelText: localization.translate('productDescription'),
                   ),
-                  textInputAction: TextInputAction.next,
+                  maxLines: null,
+                  textInputAction: TextInputAction.newline,
                   validator: _notEmptyValidation,
                   focusNode: _focusNodeDescription,
                   onFieldSubmitted: (term) {
@@ -145,48 +155,134 @@ class _ImportPageState extends State<ImportPage> {
                         context, _focusNodeDescription, _focusNodePrice);
                   },
                 ),
-                TextFormField(
-                  controller: _priceController,
-                  decoration: InputDecoration(
-                    labelText: localization.translate('productPrice'),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: _notEmptyValidation,
-                  focusNode: _focusNodePrice,
-                  onFieldSubmitted: (term) {
-                    _fieldFocusChange(
-                        context, _focusNodePrice, _focusNodeStock);
-                  },
+                SizedBox(
+                  height: 20,
                 ),
-                TextFormField(
-                  controller: _stockController,
-                  decoration: InputDecoration(
-                    labelText: localization.translate('productStock'),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: _notEmptyValidation,
-                  focusNode: _focusNodeStock,
-                  onFieldSubmitted: (term) {
-                    _fieldFocusChange(context, _focusNodeStock, _focusNodeTax);
-                  },
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        controller: _priceController,
+                        decoration: InputDecoration(
+                          labelText: localization.translate('productPrice'),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        validator: _numberValidator,
+                        keyboardType: TextInputType.number,
+                        focusNode: _focusNodePrice,
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(
+                              context, _focusNodePrice, _focusNodeStock);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _stockController,
+                        decoration: InputDecoration(
+                          labelText: localization.translate('productStock'),
+                        ),
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        validator: _numberValidator,
+                        focusNode: _focusNodeStock,
+                        onFieldSubmitted: (term) {
+                          _fieldFocusChange(
+                              context, _focusNodeStock, _focusNodeTax);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                // TODO: select box
                 TextFormField(
                   controller: _taxController,
                   decoration: InputDecoration(
                     labelText: localization.translate('productTax'),
                   ),
                   textInputAction: TextInputAction.done,
-                  validator: _notEmptyValidation,
+                  keyboardType: TextInputType.number,
+                  validator: _numberValidator,
                   focusNode: _focusNodeTax,
                   onFieldSubmitted: (term) {
                     _focusNodeTax.unfocus();
                     save();
                   },
                 ),
-                _errorText != null ? Text(_errorText) : Container(),
-                RaisedButton(
-                  child: Text(localization.translate('save')),
-                  onPressed: save,
+                SizedBox(
+                  height: 20,
+                ),
+                if (_image != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context)
+                                .inputDecorationTheme
+                                .border
+                                .borderSide
+                                .color),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      width: double.infinity,
+                      child: AspectRatio(
+                        aspectRatio: 291 / 144,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: Image.file(
+                                    _image,
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  setState(() {
+                                    _image = null;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlineButton(
+                    onPressed: getImage,
+                    color: Theme.of(context).accentColor.withOpacity(0.1),
+                    child: Text(
+                      localization.translate('uploadImage'),
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    child: Text(localization.translate('save')),
+                    onPressed: save,
+                  ),
                 ),
               ],
             ),
@@ -200,8 +296,6 @@ class _ImportPageState extends State<ImportPage> {
     final image = await ImagePicker.pickImage(
       source: ImageSource.camera,
       // todo max width/height/quality?
-      maxWidth: 300,
-      maxHeight: 300,
       imageQuality: 30,
     );
 
@@ -216,34 +310,164 @@ class _ImportPageState extends State<ImportPage> {
       return;
     }
 
-    setState(() {
-      _errorText = null;
-    });
-
     _formKey.currentState.save();
-    try {
-      final productProvider =
-          Provider.of<ProductProvider>(context, listen: false);
-      final product = (productProvider.getById(widget.id) ?? SimpleProduct());
-      product
-        ..id = widget.id
-        ..name = _nameController.text
-        ..number = _productNumberController.text
-        ..price = num.parse(_priceController.text)
-        ..stock = int.parse(_stockController.text)
-        ..description = _descriptionController.text
-        ..image = _image;
 
-      await ShopwareService().uploadProduct(
-        context,
-        product,
-      );
-      // success
-    } on DioError catch (e) {
-      setState(() {
-        _errorText = e.response.data.toString();
-      });
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    final product = (productProvider.getById(id) ?? SimpleProduct());
+    product
+      ..id = id
+      ..name = _nameController.text
+      ..number = _productNumberController.text
+      ..price = num.parse(_priceController.text)
+      ..stock = int.parse(_stockController.text)
+      ..description = _descriptionController.text
+      ..image = _image;
+
+    final result = await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: FutureBuilder(
+          initialData: false,
+          future: ShopwareService().uploadProduct(
+            context,
+            product,
+          ),
+          builder: (dialogContext, snapShot) {
+            Widget Function(BuildContext) dialogCallback = _loadingDialogWidget;
+
+            if (snapShot.hasData && snapShot.data) {
+              dialogCallback = _finishedModalWidget;
+            }
+            if (snapShot.hasError) {
+              dialogCallback =
+                  (context) => _errorModalWidget(context, snapShot.error);
+            }
+
+            return Dialog(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: dialogCallback(dialogContext),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
+    if (!result) {
+      return;
     }
+
+    _productNumberController.text = '';
+    _nameController.text = '';
+    _descriptionController.text = '';
+    _priceController.text = '';
+    _stockController.text = '';
+    _taxController.text = '';
+    setState(() {
+      id = null;
+      _image = null;
+    });
+  }
+
+  Widget _finishedModalWidget(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Icon(
+          Icons.done,
+          color: Theme.of(context).accentColor,
+          size: 52,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          AppLocalizations.of(context).translate('successfulImport'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).dialogTheme.contentTextStyle,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: RaisedButton(
+            child: Text(
+                AppLocalizations.of(context).translate('createAdditional')),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _errorModalWidget(BuildContext context, DioError error) {
+    final response = error.response.data;
+
+    List errors =
+        response['errors'].map((error) => error['detail'].toString()).toList();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Icon(
+          Icons.error_outline,
+          color: Colors.red,
+          size: 52,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          errors.join('\n'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).dialogTheme.contentTextStyle,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: RaisedButton(
+            child: Text(
+              AppLocalizations.of(context).translate('close'),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _loadingDialogWidget(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        SizedBox(
+          height: 52,
+          width: 52,
+          child: CircularProgressIndicator(),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          AppLocalizations.of(context).translate('productWillBeImported'),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).dialogTheme.contentTextStyle,
+        ),
+      ],
+    );
   }
 
   void _fieldFocusChange(
@@ -255,6 +479,20 @@ class _ImportPageState extends State<ImportPage> {
   String _notEmptyValidation(String value) {
     if (value.isEmpty) {
       return AppLocalizations.of(context).translate('requiredField');
+    }
+
+    return null;
+  }
+
+  String _numberValidator(String value) {
+    if (value.isEmpty) {
+      return AppLocalizations.of(context).translate('requiredField');
+    }
+
+    if (!RegExp(
+      r'(^(-?)(0|([1-9][0-9]*))(\.[0-9]*)?$)',
+    ).hasMatch(value)) {
+      return AppLocalizations.of(context).translate('numberOnlyField');
     }
 
     return null;

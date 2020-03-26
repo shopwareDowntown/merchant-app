@@ -94,5 +94,7 @@ class ShopwareService {
     }
 
     Provider.of<ProductProvider>(context, listen: false).addProduct(product);
+
+    return true;
   }
 }
