@@ -16,7 +16,6 @@ class DefaultDrawer extends StatelessWidget {
             title: Text(localization.translate("importProducts")),
             leading: Icon(Icons.exit_to_app),
             onTap: () {
-              LoginService().logout(context);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -41,6 +40,8 @@ class DefaultDrawer extends StatelessWidget {
             title: Text(localization.translate("logoutButtonLabel")),
             leading: Icon(Icons.exit_to_app),
             onTap: () {
+              LoginService().logout(context);
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
