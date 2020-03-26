@@ -30,4 +30,13 @@ class AccessDataChangeNotifier extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void reset() {
+    this._accessToken = null;
+    this._refreshToken = null;
+
+    this._initialized = false;
+
+    notifyListeners();
+  }
 }

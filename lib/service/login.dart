@@ -62,4 +62,15 @@ class LoginService {
 
     return prefs.containsKey("accessToken");
   }
+
+  void logout(BuildContext context) async {
+    final accessData =
+        Provider.of<AccessDataChangeNotifier>(context, listen: false);
+    accessData.reset();
+
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.remove("accessToken");
+    prefs.remove("refreshToken");
+  }
 }

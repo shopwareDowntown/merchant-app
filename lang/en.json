@@ -10,7 +10,7 @@
   "loginButtonLabel": "Login",
   "loginError": "Invalid credentitals",
   "requiredField": "Required field",
-  "save": "Sabe",
+  "save": "Save",
   "scan": "Scan barcode",
   "productName": "Product Name",
   "productNumber": "Product Nummer",
@@ -18,5 +18,7 @@
   "productStock": "In Stock",
   "productTax": "Taxrate",
   "productDescription": "Description",
-  "uploadImage": "Upload an Image"
+  "uploadImage": "Upload an Image",
+  "importPageTitle": "Import products",
+  "logoutButtonLabel": "Logout"
 }
