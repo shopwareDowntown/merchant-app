@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class LoginState extends State<LoginPage> {
   LoginService _loginService = LoginService();
   Future<bool> _isLoggedIn;
+  bool _isError = false;
 
   @override
   initState() {
@@ -132,14 +133,9 @@ class LoginState extends State<LoginPage> {
                                                 _password)
                                             .then((wasSuccessful) {
                                           if (!wasSuccessful) {
-                                            Scaffold.of(context).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  localization
-                                                      .translate("loginError"),
-                                                ),
-                                              ),
-                                            );
+                                            this.setState(() {
+                                              _isError = true;
+                                            });
 
                                             return;
                                           }
@@ -161,6 +157,39 @@ class LoginState extends State<LoginPage> {
                               ),
                             ),
                           ],
+                        ),
+                        Visibility(
+                          visible: this._isError,
+                          child: Container(
+                            padding: EdgeInsets.all(25),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: Color(0xFFDE294C)),
+                              color: Color(0xFFFBE5EA),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 2,
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: Color(0xFF758CA3),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 8,
+                                  child: Text(
+                                    localization.translate("loginError"),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF52667A),
+                                    ),
+                                    maxLines: 5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),

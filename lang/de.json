@@ -8,7 +8,7 @@
   "passwordLabel": "Passwort",
   "passwordValidationEmpty": "Bitte gebe dein Passwort an.",
   "loginButtonLabel": "Login",
-  "loginError": "Ungültige Anmeldedaten",
+  "loginError": "Du konntest nicht erfolgreich eingeloggt werden. Stelle sicher, dass die Zugangsdaten korrekt sind.",
   "requiredField": "Pflichtfeld",
   "save": "Speichern",
   "scan": "Code scannen",

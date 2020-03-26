@@ -8,7 +8,7 @@
   "passwordLabel": "Password",
   "passwordValidationEmpty": "Please enter your username.",
   "loginButtonLabel": "Login",
-  "loginError": "Invalid credentitals",
+  "loginError": "You could not be logged in. Make sure that your login credentials are correct.",
   "requiredField": "Required field",
   "save": "Save",
   "scan": "Scan barcode",
