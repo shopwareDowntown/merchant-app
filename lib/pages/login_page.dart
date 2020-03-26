@@ -42,13 +42,13 @@ class LoginState extends State<LoginPage> {
         String _password = '';
 
         return Scaffold(
-          appBar: new AppBar(
-            title: new Text(localization.translate("loginPageTitle")),
+          appBar: AppBar(
+            title: Text(localization.translate("loginPageTitle")),
           ),
-          body: new Center(
-            child: new Column(
+          body: Center(
+            child: Column(
               children: <Widget>[
-                new Container(
+                Container(
                   child: Form(
                     key: _formKey,
                     child: Column(
