@@ -27,9 +27,9 @@ class LoginService {
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
 
-        prefs.setString("shopUrl", shopUrl);
-        prefs.setString("accessToken", response.data["access_token"]);
-        prefs.setString("refreshToken", response.data["refresh_token"]);
+        await prefs.setString("shopUrl", shopUrl);
+        await prefs.setString("accessToken", response.data["access_token"]);
+        await prefs.setString("refreshToken", response.data["refresh_token"]);
 
         Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
           shopUrl: shopUrl,
@@ -70,7 +70,7 @@ class LoginService {
 
     final prefs = await SharedPreferences.getInstance();
 
-    prefs.remove("accessToken");
-    prefs.remove("refreshToken");
+    await prefs.remove("accessToken");
+    await prefs.remove("refreshToken");
   }
 }

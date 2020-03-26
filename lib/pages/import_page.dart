@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
+import 'package:product_import_app/service/ean.dart';
 import 'package:product_import_app/service/login.dart';
 import 'package:product_import_app/service/shopware_service.dart';
-import 'package:product_import_app/service/ean.dart';
 
 class ImportPage extends StatefulWidget {
   @override
@@ -47,8 +47,8 @@ class _ImportPageState extends State<ImportPage> {
     final localization = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text(localization.translate("importPageTitle")),
+      appBar: AppBar(
+        title: Text(localization.translate("importPageTitle")),
       ),
       drawer: Drawer(
         child: ListView(
@@ -74,7 +74,7 @@ class _ImportPageState extends State<ImportPage> {
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
-            child: new Column(
+            child: Column(
               children: <Widget>[
                 TextFormField(
                   controller: _nameController,
