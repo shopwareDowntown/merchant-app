@@ -31,7 +31,7 @@ class LoginService {
         prefs.setString("accessToken", response.data["access_token"]);
         prefs.setString("refreshToken", response.data["refresh_token"]);
 
-        Provider.of<AccessDataChangeNotifier>(context, listen: false).init(
+        Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
           shopUrl: shopUrl,
           accessToken: response.data["access_token"],
           refreshToken: response.data["refresh_token"],
@@ -52,13 +52,12 @@ class LoginService {
     if (accessData.hasData && accessData.isLoggedIn) {
       return true;
     }
-
     final prefs = await SharedPreferences.getInstance();
 
-    Provider.of<AccessDataChangeNotifier>(context, listen: false).init(
+    Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
       shopUrl: prefs.getString('shopUrl'),
-      accessToken: prefs.getString("access_token"),
-      refreshToken: prefs.getString("refresh_token"),
+      accessToken: prefs.getString("accessToken"),
+      refreshToken: prefs.getString("refreshToken"),
     );
 
     return prefs.containsKey("accessToken");

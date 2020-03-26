@@ -34,10 +34,7 @@ class ShopwareService {
       listen: false,
     );
 
-    accessData.init(
-      accessToken:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjcwZWJhZTlhNzkzMTM2MjI1YTMxNTY2YmFhOGZiNGY0NzJmZWRjYjZkNjI1NzQ0ZjY1OGY1YjRiOGFjOTdlZmVkMDQ0OTMzMTI2MmQxN2UyIn0.eyJhdWQiOiJhZG1pbmlzdHJhdGlvbiIsImp0aSI6IjcwZWJhZTlhNzkzMTM2MjI1YTMxNTY2YmFhOGZiNGY0NzJmZWRjYjZkNjI1NzQ0ZjY1OGY1YjRiOGFjOTdlZmVkMDQ0OTMzMTI2MmQxN2UyIiwiaWF0IjoxNTg1MTU3NzI1LCJuYmYiOjE1ODUxNTc3MjUsImV4cCI6MTU4NTE1ODMyNSwic3ViIjoiZTQ0Mzk0NTU0ZDVmNDQyMWE1ZDE3OWZmZDYwYmZlMTQiLCJzY29wZXMiOlsid3JpdGUiLCJhZG1pbiIsIndyaXRlIiwiYWRtaW4iXX0.QEHY4VzvMBBamvOQU9w3IrR5p4IzuqiKpFF3UzKiHyu-qXki5666-EnDRelYgZzaBvYzVxOaKneXb0_POv1q14wfiMyJH3EaaF3pj_B7EpBtIZ9Dlue9a8B0DseL-wm-KW4UwE4dr07Ndrv_h8pHT6wSaicGV1peJecU3L51orRDmKiR3l69jw-IXeBm6usC-VA8N-eO7gKC2ICGUFgVz750oM4iAZJ1MM3UxsTPH9bz1RgHChX1St7LJS2T3Gci2LcT_1uJrl0zSS5wLLya7pghaEP0w65-14XGjJnieLjvDhXhmXQk3YrVwDWRzDWBVqipG7ipTXABhCc2djv1nw',
-    ); // todo handle invalid token? or ignore cause merchant api use basic auth with username and password
+    // todo handle invalid token? or ignore cause merchant api use basic auth with username and password
 
     return await dio.post(
       "${accessData.shopUrl}/api/v1/product",

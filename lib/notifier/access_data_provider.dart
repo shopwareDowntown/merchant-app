@@ -17,7 +17,7 @@ class AccessDataChangeNotifier extends ChangeNotifier {
 
   String get accessToken => _accessToken;
 
-  void init({
+  void update({
     String accessToken,
     String refreshToken,
     String shopUrl,
