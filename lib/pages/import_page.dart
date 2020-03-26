@@ -9,6 +9,7 @@ import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/login.dart';
 import 'package:product_import_app/service/shopware_service.dart';
+import 'package:product_import_app/service/ean.dart';
 
 class ImportPage extends StatefulWidget {
   @override
@@ -17,6 +18,8 @@ class ImportPage extends StatefulWidget {
 
 class _ImportPageState extends State<ImportPage> {
   LoginService _loginService = LoginService();
+  EanService eanService = EanService();
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _productNumberController = TextEditingController();
@@ -249,16 +252,27 @@ class _ImportPageState extends State<ImportPage> {
 
   Future scan() async {
     try {
-      String barcode = await BarcodeScanner.scan();
-      setState(() => this._productNumberController.text = barcode);
+      String eanCode = await BarcodeScanner.scan();
+      Map eanInformation = await eanService.fetchInformation(eanCode);
+
+      setState(() {
+        this._errorText = '';
+
+        this._productNumberController.text = eanInformation['ean'] ?? '';
+        this._nameController.text = eanInformation['fullName'] ?? '';
+        this._descriptionController.text = eanInformation['description'] ?? '';
+      });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         // The user did not grant the camera permission!
+        setState(() {
+          this._errorText = 'The user did not grant the camera permission!';
+        });
       } else {
-        // unknown error
+        setState(() => this._errorText = 'Unknown error: $e');
       }
     } catch (e) {
-      // Unknown error: $e
+      setState(() => this._errorText = 'Unknown error: $e');
     }
   }
 }
