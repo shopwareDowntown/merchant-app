@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:product_import_app/notifier/access_data_provider.dart';
 import 'package:product_import_app/pages/import_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/login.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,6 +25,8 @@ class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
+    final accessData =
+        Provider.of<AccessDataChangeNotifier>(context, listen: false);
 
     return FutureBuilder(
       future: _isLoggedIn,
@@ -33,7 +37,7 @@ class LoginState extends State<LoginPage> {
 
         final _formKey = GlobalKey<FormState>();
 
-        String _shopUrl = '';
+        String _shopUrl = accessData.shopUrl ?? '';
         String _username = '';
         String _password = '';
 
@@ -54,6 +58,7 @@ class LoginState extends State<LoginPage> {
                               hintText: "htps://my-store.shopware.store",
                               labelText:
                                   localization.translate("shopUrlLabel")),
+                          initialValue: _shopUrl,
                           validator: (value) {
                             if (value.isEmpty) {
                               return localization

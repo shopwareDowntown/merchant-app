@@ -18,5 +18,7 @@
   "productStock": "Lagerbestand",
   "productTax": "Steuersatz",
   "productDescription": "Beschreibung",
-  "uploadImage": "Bild hochladen"
+  "uploadImage": "Bild hochladen",
+  "importPageTitle": "Produkte importieren",
+  "logoutButtonLabel": "Logout"
 }

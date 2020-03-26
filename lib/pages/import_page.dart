@@ -5,7 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
+import 'package:product_import_app/service/login.dart';
 import 'package:product_import_app/service/shopware_service.dart';
 import 'package:product_import_app/service/ean.dart';
 
@@ -15,7 +17,9 @@ class ImportPage extends StatefulWidget {
 }
 
 class _ImportPageState extends State<ImportPage> {
+  LoginService _loginService = LoginService();
   EanService eanService = EanService();
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _productNumberController = TextEditingController();
@@ -44,7 +48,26 @@ class _ImportPageState extends State<ImportPage> {
 
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('Import Page'),
+        title: new Text(localization.translate("importPageTitle")),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text(localization.translate("logoutButtonLabel")),
+              leading: Icon(Icons.exit_to_app),
+              onTap: () {
+                _loginService.logout(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
