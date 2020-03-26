@@ -20,5 +20,8 @@
   "productDescription": "Description",
   "uploadImage": "Upload an Image",
   "importPageTitle": "Import products",
-  "logoutButtonLabel": "Logout"
+  "productListPageTitle": "Products",
+  "logoutButtonLabel": "Logout",
+  "importProducts": "Import products",
+  "modifyProducts": "Modify products"
 }
