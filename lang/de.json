@@ -20,5 +20,6 @@
   "productDescription": "Beschreibung",
   "uploadImage": "Bild hochladen",
   "importPageTitle": "Produkte importieren",
-  "logoutButtonLabel": "Logout"
+  "logoutButtonLabel": "Logout",
+  "savedSuccessfully": "Erfolgreich gespeichert!"
 }
