@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:product_import_app/model/authority.dart';
 
 class AccessDataChangeNotifier extends ChangeNotifier {
-  String _accessToken;
-  String _refreshToken;
-  String _shopUrl;
+  String _contextToken;
+  Authority _authority;
   bool _initialized = false;
 
   bool get hasData => _initialized;
 
-  bool get isLoggedIn =>
-      this._accessToken != null && this._refreshToken != null;
+  bool get isLoggedIn => this._contextToken != null;
 
-  String get shopUrl => _shopUrl;
+  String get contextToken => _contextToken;
 
-  String get refreshToken => _refreshToken;
-
-  String get accessToken => _accessToken;
+  Authority get authority => _authority;
 
   void update({
-    String accessToken,
-    String refreshToken,
-    String shopUrl,
+    String contextToken,
+    Authority authority,
   }) {
-    this._accessToken = accessToken ?? this._accessToken;
-    this._refreshToken = refreshToken ?? this._refreshToken;
-    this._shopUrl = shopUrl ?? this._shopUrl;
+    this._contextToken = contextToken ?? this._contextToken;
+    this._authority = authority ?? this._authority;
 
     this._initialized = true;
 
@@ -32,8 +27,8 @@ class AccessDataChangeNotifier extends ChangeNotifier {
   }
 
   void reset() {
-    this._accessToken = null;
-    this._refreshToken = null;
+    this._contextToken = null;
+    this._authority = null;
 
     this._initialized = false;
 

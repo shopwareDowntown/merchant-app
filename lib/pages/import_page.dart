@@ -105,7 +105,10 @@ class _ImportPageState extends State<ImportPage> {
                             ),
                             color: Color(0xFFF9FAFB),
                           ),
-                          child: Icon(Icons.camera), //TODO: Icon?
+                          child: Icon(
+                            Icons.camera,
+                            color: Color(0xFF758CA3),
+                          ), //TODO: Icon?
                         ),
                       ),
                     ),
@@ -331,6 +334,7 @@ class _ImportPageState extends State<ImportPage> {
       ..number = _productNumberController.text
       ..price = num.parse(_priceController.text)
       ..stock = int.parse(_stockController.text)
+      ..tax = int.parse(_taxController.text)
       ..description = _descriptionController.text
       ..image = _image;
 
