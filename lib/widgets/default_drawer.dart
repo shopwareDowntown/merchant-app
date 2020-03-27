@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:product_import_app/notifier/access_data_provider.dart';
 import 'package:product_import_app/pages/import_page.dart';
 import 'package:product_import_app/pages/product_list_page.dart';
 import 'package:product_import_app/pages/start_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/login.dart';
+import 'package:provider/provider.dart';
 
 class DefaultDrawer extends StatelessWidget {
   @override
@@ -27,7 +29,7 @@ class DefaultDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      'TODO, merchant name?',
+                      "${Provider.of<AccessDataChangeNotifier>(context).companyName}",
                       style: Theme.of(context).textTheme.headline,
                     ),
                   ],
