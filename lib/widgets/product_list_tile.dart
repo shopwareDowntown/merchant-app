@@ -9,16 +9,52 @@ class ProductListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: product.imageWidget(context),
-      title: Text(product.name),
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ImportPage(id: product.id),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: ListTile(
+        leading: SizedBox(
+          width: 70,
+          height: 62,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4),
+              ),
+              border: Border.all(
+                  color: Theme.of(context)
+                      .inputDecorationTheme
+                      .border
+                      .borderSide
+                      .color),
+            ),
+            child: Center(child: product.imageWidget(context)),
           ),
-        );
-      },
+        ),
+        trailing: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(4),
+            ),
+            border: Border.all(
+                color: Theme.of(context)
+                    .inputDecorationTheme
+                    .border
+                    .borderSide
+                    .color),
+          ),
+          child: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ImportPage(id: product.id),
+                ),
+              );
+            },
+            icon: Icon(Icons.mode_edit),
+          ),
+        ),
+        title: Text(product.name),
+      ),
     );
   }
 }
