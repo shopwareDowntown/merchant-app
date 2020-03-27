@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:product_import_app/icon/shopware_icons.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
 import 'package:product_import_app/pages/import_page.dart';
 import 'package:product_import_app/pages/product_list_page.dart';
@@ -58,7 +59,7 @@ class DefaultDrawer extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.add_circle_outline,
+                        ShopwareIcons.plus_circle,
                       ),
                       SizedBox(
                         width: 10,
@@ -92,7 +93,7 @@ class DefaultDrawer extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.local_parking,
+                        ShopwareIcons.file_edit,
                         color:
                             Theme.of(context).primaryTextTheme.headline.color,
                       ),
@@ -119,7 +120,7 @@ class DefaultDrawer extends StatelessWidget {
                   ),
                   color: _lighten(Theme.of(context).accentColor, .35),
                   textColor: Theme.of(context).accentColor,
-                  icon: Icon(Icons.exit_to_app),
+                  icon: Icon(ShopwareIcons.logout),
                   onPressed: () {
                     LoginService().logout(context);
 

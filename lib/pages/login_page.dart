@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:product_import_app/icon/shopware_icons.dart';
 import 'package:product_import_app/model/authority.dart';
 import 'package:product_import_app/notifier/authority_provider.dart';
 import 'package:product_import_app/pages/import_page.dart';
@@ -40,7 +41,7 @@ class LoginState extends State<LoginPage> {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.shop), // TODO: SW-Icon?
+            child: Icon(ShopwareIcons.shopware),
           ),
         ],
       ),
@@ -133,7 +134,7 @@ class LoginState extends State<LoginPage> {
                               color: Color(0xFFF9FAFB),
                             ),
                             child: Icon(
-                              Icons.vpn_key,
+                              ShopwareIcons.key,
                               color: Color(0xFF758CA3),
                             ),
                           ),
@@ -177,7 +178,7 @@ class LoginState extends State<LoginPage> {
                         child: Row(
                           children: <Widget>[
                             Icon(
-                              Icons.error_outline,
+                              ShopwareIcons.times_hexagon,
                               color: Color(0xFF758CA3),
                             ),
                             SizedBox(width: 14),
