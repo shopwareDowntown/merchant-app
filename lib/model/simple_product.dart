@@ -81,10 +81,10 @@ class SimpleProduct {
     Map<String, dynamic> data = {
       'id': id,
       'stock': stock,
-      'tax': tax.toString(),
+      'tax': tax,
       'name': name,
       'description': description,
-      'price': price.toString(),
+      'price': price,
       'productNumber': number,
       'productType': 'product',
     };

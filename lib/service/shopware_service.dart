@@ -14,8 +14,8 @@ class ShopwareService {
   static const API_VERSION = 1; // TODO? Correct url
 
   ShopwareService._internal()
-      : dio = Dio(BaseOptions(
-            baseUrl: BASE_URL + "/merchant-api/v" + API_VERSION.toString())) {
+      : dio =
+            Dio(BaseOptions(baseUrl: "$BASE_URL/merchant-api/v$API_VERSION")) {
     // todo add interceptor for refreshing token if invalid
     // todo set base options accept / authorization
   }

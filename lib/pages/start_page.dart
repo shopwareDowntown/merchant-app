@@ -15,13 +15,7 @@ class _StartPageState extends State<StartPage> {
   @override
   initState() {
     super.initState();
-    _isLoggedIn = _loginService.isLoggedIn(context).then((loggedIn) {
-      if (loggedIn) {
-        return loggedIn;
-      }
-
-      return false;
-    });
+    _isLoggedIn = _loginService.isLoggedIn(context);
   }
 
   @override

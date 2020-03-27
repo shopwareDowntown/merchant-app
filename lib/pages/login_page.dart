@@ -81,7 +81,7 @@ class LoginState extends State<LoginPage> {
                       validator: (Authority value) {
                         if (value == null) {
                           return localization
-                              .translate("usernameValidationEmpty");
+                              .translate("authorityValidationEmpty");
                         }
 
                         return null;
