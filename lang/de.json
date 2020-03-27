@@ -11,6 +11,7 @@
   "loginError": "Du konntest nicht erfolgreich eingeloggt werden. Stelle sicher, dass die Zugangsdaten korrekt sind.",
   "requiredField": "Pflichtfeld",
   "save": "Speichern",
+  "close": "Schließen",
   "scan": "Code scannen",
   "productName": "Artikel Name",
   "productNumber": "Artikel Nummer",
@@ -23,5 +24,9 @@
   "logoutButtonLabel": "Logout",
   "productListPageTitle": "Produkte",
   "importProducts": "Produkte importieren",
-  "modifyProducts": "Produkte bearbeiten"
+  "modifyProducts": "Produkte bearbeiten",
+  "numberOnlyField": "Ungültiger Wert",
+  "productWillBeImported": "Das Produkt wird importiert ... ",
+  "successfulImport": "Das Produkt wurde erfolgreich importiert!",
+  "createAdditional": "Weiteres Produkt anlegen"
 }

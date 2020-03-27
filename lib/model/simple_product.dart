@@ -14,7 +14,13 @@ class SimpleProduct {
   File _image;
   String _imageUrl;
   String _mediaId;
-  bool isNew = true;
+  bool _isNew = true;
+
+  set isNew(bool value) {
+    this._isNew = value;
+  }
+
+  bool get isNew => _isNew || id == null;
 
   set image(File image) {
     _image = image;
@@ -52,7 +58,7 @@ class SimpleProduct {
 
     product._imageUrl =
         data['cover'] != null ? data['cover']['media']['url'] : null;
-    product.isNew = false;
+    product._isNew = false;
 
     return product;
   }
