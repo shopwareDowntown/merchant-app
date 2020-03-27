@@ -35,7 +35,7 @@ class ShopwareService {
     );
 
     final response = await dio.get(
-      "/product?associations[cover][]",
+      "/products",
       options: Options(
         contentType: 'application/json',
         headers: {
@@ -63,11 +63,11 @@ class ShopwareService {
       context,
       listen: false,
     );
-    await dio.request(
-      "/product${!product.isNew ? '/${product.id}' : ''}",
+
+    await dio.post(
+      "/products${!product.isNew ? '/${product.id}' : ''}",
       data: product.toMap(),
       options: Options(
-        method: product.isNew ? 'POST' : 'PATCH',
         contentType: 'application/json',
         headers: {
           'Accept': 'application/json',

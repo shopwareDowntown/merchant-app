@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:product_import_app/pages/import_page.dart';
 import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/service/login.dart';
-import 'package:product_import_app/service/shopware_service.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -21,9 +20,7 @@ class _StartPageState extends State<StartPage> {
         return loggedIn;
       }
 
-      return ShopwareService().getAuthorities(context).then((authorities) {
-        return false;
-      });
+      return false;
     });
   }
 

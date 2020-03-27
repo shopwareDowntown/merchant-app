@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:product_import_app/model/authority.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:product_import_app/notifier/authority_provider.dart';
+import 'package:product_import_app/service/shopware_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,8 +36,9 @@ class LoginService {
             "contextToken", response.data["sw-context-token"]);
 
         Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
-            contextToken: response.data["sw-context-token"],
-            authority: authority);
+          contextToken: response.data["sw-context-token"],
+          authority: authority,
+        );
 
         return true;
       }
@@ -52,10 +55,16 @@ class LoginService {
     if (accessData.hasData && accessData.isLoggedIn) {
       return true;
     }
+    await ShopwareService().getAuthorities(context);
+
     final prefs = await SharedPreferences.getInstance();
+
+    final authorityProvider =
+        Provider.of<AuthorityProvider>(context, listen: false);
 
     Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
       contextToken: prefs.getString('contextToken'),
+      authority: authorityProvider.getById(prefs.getString('authorityId')),
     );
 
     return prefs.containsKey("contextToken");

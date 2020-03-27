@@ -15,6 +15,6 @@ class AuthorityProvider extends ChangeNotifier {
   }
 
   Authority getById(String id) {
-    _authorities.firstWhere((authority) => authority.id == id);
+    return _authorities.firstWhere((authority) => authority.id == id);
   }
 }

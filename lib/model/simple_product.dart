@@ -52,8 +52,8 @@ class SimpleProduct {
       description: data['description'],
       stock: data['stock'],
       number: data['productNumber'],
-      price: data['price'][0]['gross'],
-      tax: data['tax']['taxRate'],
+      price: data['price'],
+      tax: data['tax'],
     );
 
     product._imageUrl =
@@ -80,52 +80,28 @@ class SimpleProduct {
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = {
       'id': id,
-      'active': true,
       'stock': stock,
-      'taxId': "c9f0c92c0f9147a989fbe7b000b4fdc9", // todo fetch correct
+      'tax': tax.toString(),
       'name': name,
       'description': description,
+      'price': price.toString(),
       'productNumber': number,
-      'price': [
-        {
-          'currencyId':
-              'b7d2554b0ce847cd82f3ac9bd1c0dfca', // todo fetch correct
-          'net': price,
-          'linked': true,
-          'gross': price,
-        }
-      ],
+      'productType': 'product',
     };
 
-    // TODO: can be removed in new api?!
-    if (isNew) {
-      data['categories'] = [
-        {
-          'id': '4350dffd5ddc4920adb92e57c7ad0f7f' // todo fetch correct
-        },
-      ];
-      data['visibilities'] = [
-        {
-          'salesChannelId':
-              '900c93394f094b3cb41604788eba7638', // todo fetch correct
-          'visibility': 30,
-        }
-      ];
-    }
-
-    if (hasMedia) {
-      final productMediaId = Uuid().v4().replaceAll('-', '');
-      data['media'] = [
-        {
-          'id': productMediaId,
-          'media': {
-            'id': mediaId,
-          },
-        }
-      ];
-
-      data['coverId'] = productMediaId;
-    }
+//    if (hasMedia) {
+//      final productMediaId = Uuid().v4().replaceAll('-', '');
+//      data['media'] = [
+//        {
+//          'id': productMediaId,
+//          'media': {
+//            'id': mediaId,
+//          },
+//        }
+//      ];
+//
+//      data['coverId'] = productMediaId;
+//    }
 
     return data;
   }

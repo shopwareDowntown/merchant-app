@@ -323,6 +323,7 @@ class _ImportPageState extends State<ImportPage> {
       ..number = _productNumberController.text
       ..price = num.parse(_priceController.text)
       ..stock = int.parse(_stockController.text)
+      ..tax = int.parse(_taxController.text)
       ..description = _descriptionController.text
       ..image = _image;
 
