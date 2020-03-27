@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:product_import_app/icon/shopware_icons.dart';
 import 'package:product_import_app/model/simple_product.dart';
 import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:product_import_app/service/app_localizations.dart';
@@ -106,9 +107,9 @@ class _ImportPageState extends State<ImportPage> {
                             color: Color(0xFFF9FAFB),
                           ),
                           child: Icon(
-                            Icons.camera,
+                            ShopwareIcons.barcode,
                             color: Color(0xFF758CA3),
-                          ), //TODO: Icon?
+                          ),
                         ),
                       ),
                     ),

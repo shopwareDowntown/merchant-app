@@ -50,3 +50,8 @@ flutter:
   assets:
     - lang/en.json
     - lang/de.json
+
+  fonts:
+    - family:  ShopwareIcons
+      fonts:
+        - asset: fonts/ShopwareIcons.ttf
