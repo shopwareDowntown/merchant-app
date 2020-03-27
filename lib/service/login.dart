@@ -40,6 +40,9 @@ class LoginService {
           authority: authority,
         );
 
+        final companyName = await ShopwareService().getCompanyName(context);
+        await prefs.setString("companyName", companyName);
+
         return true;
       }
 
@@ -62,10 +65,12 @@ class LoginService {
     final authorityProvider =
         Provider.of<AuthorityProvider>(context, listen: false);
 
-    Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
+    accessData.update(
       contextToken: prefs.getString('contextToken'),
       authority: authorityProvider.getById(prefs.getString('authorityId')),
     );
+
+    accessData.companyName = prefs.getString('companyName');
 
     return prefs.containsKey("contextToken");
   }
@@ -78,5 +83,6 @@ class LoginService {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.remove("contextToken");
+    await prefs.remove('companyName');
   }
 }

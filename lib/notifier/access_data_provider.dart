@@ -4,6 +4,7 @@ import 'package:product_import_app/model/authority.dart';
 class AccessDataChangeNotifier extends ChangeNotifier {
   String _contextToken;
   Authority _authority;
+  String _companyName;
   bool _initialized = false;
 
   bool get hasData => _initialized;
@@ -11,6 +12,13 @@ class AccessDataChangeNotifier extends ChangeNotifier {
   bool get isLoggedIn => this._contextToken != null;
 
   String get contextToken => _contextToken;
+  String get companyName => _companyName;
+
+  set companyName(String value) {
+    this._companyName = value;
+
+    notifyListeners();
+  }
 
   Authority get authority => _authority;
 
@@ -29,6 +37,7 @@ class AccessDataChangeNotifier extends ChangeNotifier {
   void reset() {
     this._contextToken = null;
     this._authority = null;
+    this._companyName = null;
 
     this._initialized = false;
 

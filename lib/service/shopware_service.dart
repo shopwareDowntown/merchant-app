@@ -79,18 +79,38 @@ class ShopwareService {
     await dio.post(
       "/products${!product.isNew ? '/${product.id}' : ''}",
       data: FormData.fromMap({...data}),
-      options: Options(
-        headers: {
-          'Accept': 'application/json',
-          "sw-access-key": accessData.authority.accessKey,
-          "sw-context-token": accessData.contextToken,
-        },
-      ),
+      options: _authorizedOptions(accessData),
     );
 
     Provider.of<ProductProvider>(context, listen: false).addProduct(product);
 
     return true;
+  }
+
+  Future<String> getCompanyName(BuildContext context) async {
+    final accessData = Provider.of<AccessDataChangeNotifier>(
+      context,
+      listen: false,
+    );
+
+    final response = await dio.get(
+      '/profile',
+      options: _authorizedOptions(accessData),
+    );
+    final companyName = response.data['publicCompanyName'];
+    accessData.companyName = companyName;
+
+    return companyName;
+  }
+
+  Options _authorizedOptions(AccessDataChangeNotifier accessData) {
+    return Options(
+      headers: {
+        'Accept': 'application/json',
+        "sw-access-key": accessData.authority.accessKey,
+        "sw-context-token": accessData.contextToken,
+      },
+    );
   }
 
   Future<List<Authority>> getAuthorities(BuildContext context) async {
