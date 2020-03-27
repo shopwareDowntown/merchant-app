@@ -1,41 +1,41 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:product_import_app/model/authority.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
+  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
+
   Future<bool> login(
     BuildContext context,
-    String shopUrl,
+    Authority authority,
     String username,
     String password,
   ) async {
-    while (shopUrl.endsWith("/")) {
-      shopUrl = shopUrl.substring(0, shopUrl.length - 1);
-    }
-
     try {
-      Response response = await Dio().post(shopUrl + "/api/oauth/token", data: {
-        "grant_type": "password",
-        "client_id": "administration",
-        "scopes": "write",
-        "username": username,
-        "password": password,
-      });
+      Response response =
+          await Dio().post(BASE_URL + "/sales-channel-api/v1/customer/login",
+              data: {
+                "username": username,
+                "password": password,
+              },
+              options: Options(
+                headers: {"sw-access-key": authority.accessKey},
+              ));
 
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
 
-        await prefs.setString("shopUrl", shopUrl);
-        await prefs.setString("accessToken", response.data["access_token"]);
-        await prefs.setString("refreshToken", response.data["refresh_token"]);
+        await prefs.setString("authorityId", authority.id);
+        await prefs.setString("accessKey", authority.accessKey);
+        await prefs.setString(
+            "contextToken", response.data["sw-context-token"]);
 
         Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
-          shopUrl: shopUrl,
-          accessToken: response.data["access_token"],
-          refreshToken: response.data["refresh_token"],
-        );
+            contextToken: response.data["sw-context-token"],
+            authority: authority);
 
         return true;
       }
@@ -55,12 +55,10 @@ class LoginService {
     final prefs = await SharedPreferences.getInstance();
 
     Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
-      shopUrl: prefs.getString('shopUrl'),
-      accessToken: prefs.getString("accessToken"),
-      refreshToken: prefs.getString("refreshToken"),
+      contextToken: prefs.getString('contextToken'),
     );
 
-    return prefs.containsKey("accessToken");
+    return prefs.containsKey("contextToken");
   }
 
   void logout(BuildContext context) async {
@@ -70,7 +68,6 @@ class LoginService {
 
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.remove("accessToken");
-    await prefs.remove("refreshToken");
+    await prefs.remove("contextToken");
   }
 }

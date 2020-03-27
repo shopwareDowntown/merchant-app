@@ -11,8 +11,11 @@ class ShopwareService {
   static ShopwareService _instance;
   final Dio dio;
   static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
+  static const API_VERSION = 1; // TODO? Correct url
 
-  ShopwareService._internal() : dio = Dio() {
+  ShopwareService._internal()
+      : dio = Dio(BaseOptions(
+            baseUrl: BASE_URL + "/merchant-api/v" + API_VERSION.toString())) {
     // todo add interceptor for refreshing token if invalid
     // todo set base options accept / authorization
   }
@@ -32,12 +35,13 @@ class ShopwareService {
     );
 
     final response = await dio.get(
-      "${accessData.shopUrl}/api/v1/product?associations[cover][]",
+      "/product?associations[cover][]",
       options: Options(
         contentType: 'application/json',
         headers: {
           'Accept': 'application/json',
-          "Authorization": "Bearer ${accessData.accessToken}",
+          "sw-access-key": accessData.authority.accessKey,
+          "sw-context-token": accessData.contextToken,
         },
       ),
     );
@@ -60,41 +64,42 @@ class ShopwareService {
       listen: false,
     );
     await dio.request(
-      "${accessData.shopUrl}/api/v1/product${!product.isNew ? '/${product.id}' : ''}",
+      "/product${!product.isNew ? '/${product.id}' : ''}",
       data: product.toMap(),
       options: Options(
         method: product.isNew ? 'POST' : 'PATCH',
         contentType: 'application/json',
         headers: {
           'Accept': 'application/json',
-          "Authorization": "Bearer ${accessData.accessToken}",
+          "sw-access-key": accessData.authority.accessKey,
+          "sw-context-token": accessData.contextToken,
         },
       ),
     );
 
-    if (product.hasMedia) {
-      final image = product.image;
-      final extension = image.path.split('.').last;
-      final postData = image.openRead();
-      final length = (await image.readAsBytes()).length;
-
-      await dio.post(
-        "${accessData.shopUrl}/api/v1/_action/media/${product.mediaId}/upload",
-        data: postData,
-        queryParameters: {
-          'extension': extension,
-          'fileName': image.path.split('/').last.split('.').first,
-        },
-        options: Options(
-          contentType: 'image/$extension',
-          headers: {
-            Headers.contentLengthHeader: length,
-            Headers.acceptHeader: 'application/json',
-            "Authorization": "Bearer ${accessData.accessToken}",
-          },
-        ),
-      );
-    }
+//    if (product.hasMedia) {
+//      final image = product.image;
+//      final extension = image.path.split('.').last;
+//      final postData = image.openRead();
+//      final length = (await image.readAsBytes()).length;
+//
+//      await dio.post(
+//        "${accessData.shopUrl}/api/v1/_action/media/${product.mediaId}/upload",
+//        data: postData,
+//        queryParameters: {
+//          'extension': extension,
+//          'fileName': image.path.split('/').last.split('.').first,
+//        },
+//        options: Options(
+//          contentType: 'image/$extension',
+//          headers: {
+//            Headers.contentLengthHeader: length,
+//            Headers.acceptHeader: 'application/json',
+//            "Authorization": "Bearer ${accessData.accessToken}",
+//          },
+//        ),
+//      );
+//    }
 
     Provider.of<ProductProvider>(context, listen: false).addProduct(product);
 
@@ -109,7 +114,7 @@ class ShopwareService {
       return authorityProvider.authorities;
     }
 
-    final response = await dio.get("$BASE_URL/merchant-api/v1/authorities");
+    final response = await dio.get("/authorities");
     final List authoritiesData = response.data;
     final List<Authority> authorities = authoritiesData
         .map((authorityData) => Authority.fromJson(authorityData))

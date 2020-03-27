@@ -102,7 +102,10 @@ class _ImportPageState extends State<ImportPage> {
                             ),
                             color: Color(0xFFF9FAFB),
                           ),
-                          child: Icon(Icons.camera), //TODO: Icon?
+                          child: Icon(
+                            Icons.camera,
+                            color: Color(0xFF758CA3),
+                          ), //TODO: Icon?
                         ),
                       ),
                     ),

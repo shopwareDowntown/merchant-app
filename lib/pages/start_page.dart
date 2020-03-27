@@ -20,9 +20,10 @@ class _StartPageState extends State<StartPage> {
       if (loggedIn) {
         return loggedIn;
       }
-      ShopwareService().getAuthorities(context);
 
-      return false;
+      return ShopwareService().getAuthorities(context).then((authorities) {
+        return false;
+      });
     });
   }
 

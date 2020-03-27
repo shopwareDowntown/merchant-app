@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:flutter/services.dart';
+import 'package:product_import_app/model/authority.dart';
+import 'package:product_import_app/notifier/authority_provider.dart';
 import 'package:product_import_app/pages/import_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/login.dart';
@@ -18,22 +20,18 @@ class LoginState extends State<LoginPage> {
   bool _isError = false;
   bool _isLogginIn = false;
   final _formKey = GlobalKey<FormState>();
-  final _shopFocus = FocusNode();
+  final _authorityFocus = FocusNode();
   final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
-  final _shopController = TextEditingController();
+  Authority _authority;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
-    final accessData =
-        Provider.of<AccessDataChangeNotifier>(context, listen: false);
-
-    _shopController.text = _shopController.text.isEmpty
-        ? accessData.shopUrl ?? ''
-        : _shopController.text;
+    final authorityProvider =
+        Provider.of<AuthorityProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,30 +54,37 @@ class LoginState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    // TODO: Replace with select
-                    TextFormField(
-                      focusNode: _shopFocus,
+                    DropdownButtonFormField(
+                      value: _authority,
+                      hint: Text(localization.translate("authorityLabel")),
+                      items: authorityProvider.authorities
+                          .map<DropdownMenuItem<Authority>>((authority) {
+                        return DropdownMenuItem<Authority>(
+                          value: authority,
+                          child: Text(authority.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _authority = value;
+                        });
+                        _fieldFocusChange(
+                          context,
+                          _authorityFocus,
+                          _usernameFocus,
+                        );
+                      },
+                      isExpanded: true,
                       decoration: InputDecoration(
-                          hintText: "https://my-store.shopware.store",
-                          labelText: localization.translate("shopUrlLabel")),
-                      controller: _shopController,
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value.isEmpty) {
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                      validator: (Authority value) {
+                        if (value == null) {
                           return localization
-                              .translate("shopUrlValidationEmpty");
-                        }
-
-                        bool _validURL = Uri.parse(value).isAbsolute;
-                        if (!_validURL) {
-                          return localization
-                              .translate("shopUrlValidationNotValid");
+                              .translate("usernameValidationEmpty");
                         }
 
                         return null;
-                      },
-                      onFieldSubmitted: (value) {
-                        _fieldFocusChange(context, _shopFocus, _usernameFocus);
                       },
                     ),
                     SizedBox(height: 20),
@@ -99,6 +104,7 @@ class LoginState extends State<LoginPage> {
                         return null;
                       },
                       textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.emailAddress,
                       onFieldSubmitted: (value) {
                         _fieldFocusChange(
                           context,
@@ -126,7 +132,10 @@ class LoginState extends State<LoginPage> {
                               ),
                               color: Color(0xFFF9FAFB),
                             ),
-                            child: Icon(Icons.vpn_key),
+                            child: Icon(
+                              Icons.vpn_key,
+                              color: Color(0xFF758CA3),
+                            ),
                           ),
                         ),
                       ),
@@ -167,13 +176,11 @@ class LoginState extends State<LoginPage> {
                         ),
                         child: Row(
                           children: <Widget>[
-                            Expanded(
-                              flex: 2,
-                              child: Icon(
-                                Icons.error_outline,
-                                color: Color(0xFF758CA3),
-                              ),
+                            Icon(
+                              Icons.error_outline,
+                              color: Color(0xFF758CA3),
                             ),
+                            SizedBox(width: 14),
                             Expanded(
                               flex: 8,
                               child: Text(
@@ -215,7 +222,7 @@ class LoginState extends State<LoginPage> {
 
       final wasSuccessful = await _loginService.login(
         context,
-        _shopController.text,
+        _authority,
         _usernameController.text,
         _passwordController.text,
       );
