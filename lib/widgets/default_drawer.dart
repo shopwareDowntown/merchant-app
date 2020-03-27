@@ -51,20 +51,25 @@ class DefaultDrawer extends StatelessWidget {
                     ),
                   );
                 },
+                color: Theme.of(context).accentColor,
                 textColor: Theme.of(context).accentColor,
-                child: Row(
-                  children: [
-                    Icon(
-                      ShopwareIcons.plus_circle,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      localization.translate('importProducts'),
-                    ),
-                  ],
+                borderSide: BorderSide(color: Theme.of(context).accentColor),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 20.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        ShopwareIcons.plus_circle,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        localization.translate('importProducts'),
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -82,20 +87,25 @@ class DefaultDrawer extends StatelessWidget {
                     ),
                   );
                 },
-                textColor: Theme.of(context).accentColor,
-                child: Row(
-                  children: [
-                    Icon(
-                      ShopwareIcons.file_edit,
-                      color: Theme.of(context).accentColor,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      localization.translate('modifyProducts'),
-                    ),
-                  ],
+                textColor: Theme.of(context).primaryTextTheme.headline.color,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 20.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        ShopwareIcons.file_edit,
+                        color:
+                            Theme.of(context).primaryTextTheme.headline.color,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        localization.translate('modifyProducts'),
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -108,7 +118,7 @@ class DefaultDrawer extends StatelessWidget {
                   label: Text(
                     localization.translate("logoutButtonLabel"),
                   ),
-                  color: Theme.of(context).accentColor.withOpacity(0.1),
+                  color: _lighten(Theme.of(context).accentColor, .35),
                   textColor: Theme.of(context).accentColor,
                   icon: Icon(ShopwareIcons.logout),
                   onPressed: () {
@@ -129,5 +139,15 @@ class DefaultDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _lighten(Color color, [double amount = .1]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslLight =
+        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+
+    return hslLight.toColor();
   }
 }

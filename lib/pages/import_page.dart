@@ -277,6 +277,8 @@ class _ImportPageState extends State<ImportPage> {
                   child: OutlineButton(
                     onPressed: getImage,
                     color: Theme.of(context).accentColor.withOpacity(0.1),
+                    borderSide:
+                        BorderSide(color: Theme.of(context).accentColor),
                     child: Text(
                       localization.translate('uploadImage'),
                       style: TextStyle(
