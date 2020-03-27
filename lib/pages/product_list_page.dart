@@ -31,10 +31,12 @@ class _ProductListPageState extends State<ProductListPage> {
         ),
       ),
       drawer: DefaultDrawer(),
-      body: ListView(
-        children: productProvider.products
-            .map((product) => ProductListTile(product))
-            .toList(),
+      body: ListView.separated(
+        physics: BouncingScrollPhysics(),
+        itemCount: productProvider.products.length,
+        itemBuilder: (context, index) =>
+            ProductListTile(productProvider.products[index]),
+        separatorBuilder: (context, index) => Divider(),
       ),
     );
   }
