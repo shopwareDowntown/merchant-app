@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:product_import_app/pages/import_page.dart';
-import 'package:product_import_app/pages/login_page.dart';
 import 'package:product_import_app/pages/product_list_page.dart';
+import 'package:product_import_app/pages/start_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
 import 'package:product_import_app/service/login.dart';
 
@@ -114,7 +114,7 @@ class DefaultDrawer extends StatelessWidget {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginPage(),
+                        builder: (context) => StartPage(),
                       ),
                       (route) => false,
                     );

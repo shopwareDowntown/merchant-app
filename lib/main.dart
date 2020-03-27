@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:product_import_app/notifier/authority_provider.dart';
 import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:product_import_app/pages/start_page.dart';
 import 'package:product_import_app/service/app_localizations.dart';
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AccessDataChangeNotifier()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(
+          create: (context) => AuthorityProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
