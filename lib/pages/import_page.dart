@@ -38,7 +38,6 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
   final _focusNodeTax = FocusNode();
-  String _errorText;
 
   File _image;
   String id;
@@ -503,24 +502,18 @@ class _ImportPageState extends State<ImportPage> {
       String eanCode = await BarcodeScanner.scan();
       Map eanInformation = await eanService.fetchInformation(eanCode);
 
-      setState(() {
-        this._errorText = '';
-
-        this._productNumberController.text = eanInformation['ean'] ?? '';
-        this._nameController.text = eanInformation['fullName'] ?? '';
-        this._descriptionController.text = eanInformation['description'] ?? '';
-      });
+      this._productNumberController.text = eanInformation['ean'] ?? '';
+      this._nameController.text = eanInformation['fullName'] ?? '';
+      this._descriptionController.text = eanInformation['description'] ?? '';
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         // The user did not grant the camera permission!
-        setState(() {
-          this._errorText = 'The user did not grant the camera permission!';
-        });
+        print('The user did not grant the camera permission!');
       } else {
-        setState(() => this._errorText = 'Unknown error: $e');
+        print('Unknown error: $e');
       }
     } catch (e) {
-      setState(() => this._errorText = 'Unknown error: $e');
+      print('Unknown error: $e');
     }
   }
 }
