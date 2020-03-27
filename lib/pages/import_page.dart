@@ -38,6 +38,7 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
   final _focusNodeTax = FocusNode();
+  bool autoValidate = false;
 
   File _image;
   String id;
@@ -61,6 +62,7 @@ class _ImportPageState extends State<ImportPage> {
         _taxController.text = product.tax?.toString() ?? '';
         setState(() {
           _image = product.image;
+          autoValidate = true;
         });
       });
     }
@@ -84,6 +86,7 @@ class _ImportPageState extends State<ImportPage> {
               children: <Widget>[
                 TextFormField(
                   controller: _productNumberController,
+                  autovalidate: autoValidate,
                   decoration: InputDecoration(
                     labelText: localization.translate('productNumber'),
                     suffixIcon: GestureDetector(
@@ -123,6 +126,7 @@ class _ImportPageState extends State<ImportPage> {
                 ),
                 TextFormField(
                   controller: _nameController,
+                  autovalidate: autoValidate,
                   decoration: InputDecoration(
                     labelText: localization.translate('productName'),
                   ),
@@ -142,6 +146,7 @@ class _ImportPageState extends State<ImportPage> {
                 ),
                 TextFormField(
                   controller: _descriptionController,
+                  autovalidate: autoValidate,
                   decoration: InputDecoration(
                     labelText: localization.translate('productDescription'),
                   ),
@@ -162,6 +167,7 @@ class _ImportPageState extends State<ImportPage> {
                     Expanded(
                       child: TextFormField(
                         controller: _priceController,
+                        autovalidate: autoValidate,
                         decoration: InputDecoration(
                           labelText: localization.translate('productPrice'),
                         ),
@@ -181,6 +187,7 @@ class _ImportPageState extends State<ImportPage> {
                     Expanded(
                       child: TextFormField(
                         controller: _stockController,
+                        autovalidate: autoValidate,
                         decoration: InputDecoration(
                           labelText: localization.translate('productStock'),
                         ),
@@ -202,6 +209,7 @@ class _ImportPageState extends State<ImportPage> {
                 // TODO: select box
                 TextFormField(
                   controller: _taxController,
+                  autovalidate: autoValidate,
                   decoration: InputDecoration(
                     labelText: localization.translate('productTax'),
                   ),
@@ -304,8 +312,11 @@ class _ImportPageState extends State<ImportPage> {
   }
 
   void save() async {
+    setState(() {
+      autoValidate = true;
+    });
+
     if (!_formKey.currentState.validate()) {
-      // todo handle errors
       return;
     }
 
@@ -371,6 +382,7 @@ class _ImportPageState extends State<ImportPage> {
     setState(() {
       id = null;
       _image = null;
+      autoValidate = false;
     });
   }
 
