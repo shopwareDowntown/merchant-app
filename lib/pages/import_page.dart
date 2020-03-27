@@ -32,17 +32,16 @@ class _ImportPageState extends State<ImportPage> {
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _stockController = TextEditingController();
-  final _taxController = TextEditingController();
   final _focusNodeName = FocusNode();
   final _focusNodeProductNumber = FocusNode();
   final _focusNodePrice = FocusNode();
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
-  final _focusNodeTax = FocusNode();
   bool autoValidate = false;
 
   File _image;
   String id;
+  num _taxRate;
 
   @override
   initState() {
@@ -60,7 +59,7 @@ class _ImportPageState extends State<ImportPage> {
         _descriptionController.text = product.description ?? '';
         _stockController.text = product.stock?.toString() ?? '';
         _priceController.text = product.price?.toString() ?? '';
-        _taxController.text = product.tax?.toString() ?? '';
+        _taxRate = product.tax;
         setState(() {
           _image = product.image;
           autoValidate = true;
@@ -199,10 +198,6 @@ class _ImportPageState extends State<ImportPage> {
                         textInputAction: TextInputAction.next,
                         validator: _numberValidator,
                         focusNode: _focusNodeStock,
-                        onFieldSubmitted: (term) {
-                          _fieldFocusChange(
-                              context, _focusNodeStock, _focusNodeTax);
-                        },
                       ),
                     ),
                   ],
@@ -210,20 +205,33 @@ class _ImportPageState extends State<ImportPage> {
                 SizedBox(
                   height: 20,
                 ),
-                // TODO: select box
-                TextFormField(
-                  controller: _taxController,
+                DropdownButtonFormField(
+                  value: _taxRate,
                   autovalidate: autoValidate,
-                  decoration: InputDecoration(
-                    labelText: localization.translate('productTax'),
-                  ),
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.number,
-                  validator: _numberValidator,
-                  focusNode: _focusNodeTax,
-                  onFieldSubmitted: (term) {
-                    _focusNodeTax.unfocus();
+                  hint: Text(localization.translate('productTax')),
+                  items: [7, 19].map<DropdownMenuItem<num>>((tax) {
+                    return DropdownMenuItem<num>(
+                      value: tax,
+                      child: Text("$tax%"),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _taxRate = value;
+                    });
                     save();
+                  },
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  validator: (value) {
+                    if (value == null) {
+                      return AppLocalizations.of(context)
+                          .translate('requiredField');
+                    }
+
+                    return null;
                   },
                 ),
                 SizedBox(
@@ -337,7 +345,7 @@ class _ImportPageState extends State<ImportPage> {
       ..number = _productNumberController.text
       ..price = num.parse(_priceController.text)
       ..stock = int.parse(_stockController.text)
-      ..tax = int.parse(_taxController.text)
+      ..tax = _taxRate
       ..description = _descriptionController.text
       ..image = _image;
 
@@ -385,11 +393,11 @@ class _ImportPageState extends State<ImportPage> {
     _descriptionController.text = '';
     _priceController.text = '';
     _stockController.text = '';
-    _taxController.text = '';
     setState(() {
       id = null;
       _image = null;
       autoValidate = false;
+      _taxRate = null;
     });
   }
 
