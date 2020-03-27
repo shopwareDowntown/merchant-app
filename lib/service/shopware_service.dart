@@ -64,35 +64,23 @@ class ShopwareService {
       listen: false,
     );
 
+    final data = product.toMap();
+
+    if (product.hasMedia) {
+      final image = product.image;
+      data["media"] = [
+        await MultipartFile.fromFile(
+          image.path,
+          filename: image.path.split('/').last.split('.').first,
+        )
+      ];
+    }
+
     await dio.post(
       "/products${!product.isNew ? '/${product.id}' : ''}",
-      data: product.toMap(),
+      data: FormData.fromMap({...data}),
       options: _authorizedOptions(accessData),
     );
-
-//    if (product.hasMedia) {
-//      final image = product.image;
-//      final extension = image.path.split('.').last;
-//      final postData = image.openRead();
-//      final length = (await image.readAsBytes()).length;
-//
-//      await dio.post(
-//        "${accessData.shopUrl}/api/v1/_action/media/${product.mediaId}/upload",
-//        data: postData,
-//        queryParameters: {
-//          'extension': extension,
-//          'fileName': image.path.split('/').last.split('.').first,
-//        },
-//        options: Options(
-//          contentType: 'image/$extension',
-//          headers: {
-//            Headers.contentLengthHeader: length,
-//            Headers.acceptHeader: 'application/json',
-//            "Authorization": "Bearer ${accessData.accessToken}",
-//          },
-//        ),
-//      );
-//    }
 
     Provider.of<ProductProvider>(context, listen: false).addProduct(product);
 
@@ -117,7 +105,6 @@ class ShopwareService {
 
   Options _authorizedOptions(AccessDataChangeNotifier accessData) {
     return Options(
-      contentType: 'application/json',
       headers: {
         'Accept': 'application/json',
         "sw-access-key": accessData.authority.accessKey,

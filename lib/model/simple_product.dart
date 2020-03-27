@@ -56,8 +56,7 @@ class SimpleProduct {
       tax: data['tax'],
     );
 
-    product._imageUrl =
-        data['cover'] != null ? data['cover']['media']['url'] : null;
+    product._imageUrl = data['media'];
     product._isNew = false;
 
     return product;
@@ -88,20 +87,6 @@ class SimpleProduct {
       'productNumber': number,
       'productType': 'product',
     };
-
-//    if (hasMedia) {
-//      final productMediaId = Uuid().v4().replaceAll('-', '');
-//      data['media'] = [
-//        {
-//          'id': productMediaId,
-//          'media': {
-//            'id': mediaId,
-//          },
-//        }
-//      ];
-//
-//      data['coverId'] = productMediaId;
-//    }
 
     return data;
   }
