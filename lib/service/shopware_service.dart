@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:product_import_app/model/authority.dart';
 import 'package:product_import_app/model/simple_product.dart';
 import 'package:product_import_app/notifier/access_data_provider.dart';
+import 'package:product_import_app/notifier/authority_provider.dart';
 import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopwareService {
   static ShopwareService _instance;
   final Dio dio;
+  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
 
   ShopwareService._internal() : dio = Dio() {
     // todo add interceptor for refreshing token if invalid
@@ -96,5 +99,24 @@ class ShopwareService {
     Provider.of<ProductProvider>(context, listen: false).addProduct(product);
 
     return true;
+  }
+
+  Future<List<Authority>> getAuthorities(BuildContext context) async {
+    final authorityProvider =
+        Provider.of<AuthorityProvider>(context, listen: false);
+
+    if (authorityProvider.hasAuthorities) {
+      return authorityProvider.authorities;
+    }
+
+    final response = await dio.get("$BASE_URL/merchant-api/v1/authorities");
+    final List authoritiesData = response.data;
+    final List<Authority> authorities = authoritiesData
+        .map((authorityData) => Authority.fromJson(authorityData))
+        .toList();
+
+    authorityProvider.setAuthorities(authorities);
+
+    return authorities;
   }
 }
