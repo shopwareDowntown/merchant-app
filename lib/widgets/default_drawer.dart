@@ -1,11 +1,11 @@
+import 'package:downtown_merchant_app/icon/shopware_icons.dart';
+import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
+import 'package:downtown_merchant_app/pages/import_page.dart';
+import 'package:downtown_merchant_app/pages/product_list_page.dart';
+import 'package:downtown_merchant_app/pages/start_page.dart';
+import 'package:downtown_merchant_app/service/app_localizations.dart';
+import 'package:downtown_merchant_app/service/login.dart';
 import 'package:flutter/material.dart';
-import 'package:product_import_app/icon/shopware_icons.dart';
-import 'package:product_import_app/notifier/access_data_provider.dart';
-import 'package:product_import_app/pages/import_page.dart';
-import 'package:product_import_app/pages/product_list_page.dart';
-import 'package:product_import_app/pages/start_page.dart';
-import 'package:product_import_app/service/app_localizations.dart';
-import 'package:product_import_app/service/login.dart';
 import 'package:provider/provider.dart';
 
 class DefaultDrawer extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:product_import_app/notifier/product_provider.dart';
-import 'package:product_import_app/service/app_localizations.dart';
-import 'package:product_import_app/service/shopware_service.dart';
-import 'package:product_import_app/widgets/default_drawer.dart';
-import 'package:product_import_app/widgets/product_list_tile.dart';
+import 'package:downtown_merchant_app/notifier/product_provider.dart';
+import 'package:downtown_merchant_app/service/app_localizations.dart';
+import 'package:downtown_merchant_app/service/shopware_service.dart';
+import 'package:downtown_merchant_app/widgets/default_drawer.dart';
+import 'package:downtown_merchant_app/widgets/product_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class ProductListPage extends StatefulWidget {

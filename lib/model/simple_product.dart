@@ -75,11 +75,7 @@ class SimpleProduct {
       return imageUrls.map((imageUrl) => Image.network(imageUrl));
     }
 
-    return [
-      Container(
-        child: Text('TODO'),
-      )
-    ];
+    return [Container()];
   }
 
   Map<String, dynamic> toMap() {

@@ -2,16 +2,16 @@ import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:dio/dio.dart';
+import 'package:downtown_merchant_app/icon/shopware_icons.dart';
+import 'package:downtown_merchant_app/model/simple_product.dart';
+import 'package:downtown_merchant_app/notifier/product_provider.dart';
+import 'package:downtown_merchant_app/service/app_localizations.dart';
+import 'package:downtown_merchant_app/service/ean.dart';
+import 'package:downtown_merchant_app/service/shopware_service.dart';
+import 'package:downtown_merchant_app/widgets/default_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:product_import_app/icon/shopware_icons.dart';
-import 'package:product_import_app/model/simple_product.dart';
-import 'package:product_import_app/notifier/product_provider.dart';
-import 'package:product_import_app/service/app_localizations.dart';
-import 'package:product_import_app/service/ean.dart';
-import 'package:product_import_app/service/shopware_service.dart';
-import 'package:product_import_app/widgets/default_drawer.dart';
 import 'package:provider/provider.dart';
 
 class ImportPage extends StatefulWidget {
@@ -470,11 +470,13 @@ class _ImportPageState extends State<ImportPage> {
         _images.add(image);
       });
 
-      await pageController.animateToPage(
-        _images.length - 1,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.linear,
-      );
+      if (_images.length > 1) {
+        await pageController.animateToPage(
+          _images.length - 1,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.linear,
+        );
+      }
     }
   }
 
