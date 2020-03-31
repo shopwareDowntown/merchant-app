@@ -62,10 +62,10 @@ class _ImportPageState extends State<ImportPage> {
         _descriptionController.text = product.description ?? '';
         _stockController.text = product.stock?.toString() ?? '';
         _priceController.text = product.price?.toString() ?? '';
-        _taxRate = product.tax;
         setState(() {
           _images = product.images ?? [];
           _imageUrls = product.imageUrls ?? [];
+          _taxRate = product.tax;
           autoValidate = true;
         });
       });
@@ -75,7 +75,6 @@ class _ImportPageState extends State<ImportPage> {
   @override
   void dispose() {
     super.dispose();
-    _taxController.dispose();
     _productNumberController.dispose();
     _stockController.dispose();
     _priceController.dispose();
@@ -235,14 +234,13 @@ class _ImportPageState extends State<ImportPage> {
                     setState(() {
                       _taxRate = value;
                     });
-                    save();
                   },
                   isExpanded: true,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                   ),
                   validator: (value) {
-                    if (value == null) {
+                    if (_taxRate == null) {
                       return AppLocalizations.of(context)
                           .translate('requiredField');
                     }
@@ -310,6 +308,7 @@ class _ImportPageState extends State<ImportPage> {
                     child: Container(
                       height: MediaQuery.of(context).size.height / 291 * 100,
                       child: PageView.builder(
+                        physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         controller: pageController,
                         itemCount: _images.length,
@@ -439,6 +438,7 @@ class _ImportPageState extends State<ImportPage> {
       return;
     }
 
+    FocusScope.of(context).unfocus();
     final image = await ImagePicker.pickImage(
       source: ImageSource.camera,
       // todo max width/height/quality?
@@ -449,6 +449,12 @@ class _ImportPageState extends State<ImportPage> {
       setState(() {
         _images.add(image);
       });
+
+      await pageController.animateToPage(
+        _images.length - 1,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.linear,
+      );
     }
   }
 
