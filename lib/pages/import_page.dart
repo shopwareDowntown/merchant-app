@@ -685,9 +685,10 @@ class _ImportPageState extends State<ImportPage> {
   Future scan() async {
     try {
       String eanCode = await BarcodeScanner.scan();
+      this._productNumberController.text = eanCode;
+
       Map eanInformation = await eanService.fetchInformation(eanCode);
 
-      this._productNumberController.text = eanInformation['ean'] ?? '';
       this._nameController.text = eanInformation['fullName'] ?? '';
       this._descriptionController.text = eanInformation['description'] ?? '';
     } on PlatformException catch (e) {
