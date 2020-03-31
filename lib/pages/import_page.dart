@@ -38,6 +38,7 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
   bool autoValidate = false;
+  bool active = true;
   PageController pageController = PageController();
 
   List<File> _images = [];
@@ -67,6 +68,7 @@ class _ImportPageState extends State<ImportPage> {
           _imageUrls = product.imageUrls ?? [];
           _taxRate = product.tax;
           autoValidate = true;
+          active = product.active;
         });
       });
     }
@@ -137,6 +139,19 @@ class _ImportPageState extends State<ImportPage> {
                       _focusNodeProductNumber,
                       _focusNodeName,
                     );
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(localization.translate('active')),
+                  value: active,
+                  onChanged: (value) {
+                    setState(() {
+                      active = value;
+                    });
                   },
                 ),
                 SizedBox(
@@ -289,9 +304,7 @@ class _ImportPageState extends State<ImportPage> {
                                   IconButton(
                                     icon: Icon(Icons.close),
                                     onPressed: () {
-                                      setState(() {
-                                        _imageUrls.removeAt(index);
-                                      });
+                                      removeImagesDialog();
                                     },
                                   ),
                                 ],
@@ -392,28 +405,35 @@ class _ImportPageState extends State<ImportPage> {
       return true;
     }
 
+    final localization = AppLocalizations.of(context);
     final response = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(replace ? "Replace images" : "Remove images"),
+        title: Text(replace
+            ? localization.translate('replaceImages')
+            : localization.translate('removeImages')),
         contentTextStyle: TextStyle(color: Colors.black),
-        content: Text(replace
-            ? 'Continue and replace all existing images?'
-            : 'Continue and remove all existing images?'),
+        content: Text(
+          replace
+              ? localization.translate('replaceImagesContent')
+              : localization.translate('removeImagesContent'),
+        ),
         actions: <Widget>[
-          FlatButton(
+          OutlineButton(
             textColor: Theme.of(context).accentColor,
-            child: Text('Confirm'),
+            child: Text(localization.translate('cancel')),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          RaisedButton(
+            color: Theme.of(context).errorColor,
+            child: Text(replace
+                ? localization.translate('replace')
+                : localization.translate('remove')),
             autofocus: true,
             onPressed: () {
               Navigator.of(context).pop(true);
-            },
-          ),
-          FlatButton(
-            textColor: Theme.of(context).accentColor,
-            child: Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop(false);
             },
           ),
         ],
@@ -473,6 +493,7 @@ class _ImportPageState extends State<ImportPage> {
         Provider.of<ProductProvider>(context, listen: false);
     final product = (productProvider.getById(id) ?? SimpleProduct());
     product
+      ..active = active
       ..id = id
       ..name = _nameController.text
       ..number = _productNumberController.text
@@ -480,6 +501,7 @@ class _ImportPageState extends State<ImportPage> {
       ..stock = int.parse(_stockController.text)
       ..tax = _taxRate
       ..description = _descriptionController.text
+      ..imageUrls = _imageUrls
       ..images = _images;
 
     final result = await showDialog(
@@ -531,6 +553,7 @@ class _ImportPageState extends State<ImportPage> {
       _images = [];
       _imageUrls = [];
       autoValidate = false;
+      active = true;
       _taxRate = null;
     });
   }
@@ -571,7 +594,6 @@ class _ImportPageState extends State<ImportPage> {
 
   Widget _errorModalWidget(BuildContext context, DioError error) {
     final response = error.response.data;
-    print(response);
 
     List errors = [response.toString()];
 //    List errors =

@@ -74,6 +74,8 @@ class ShopwareService {
             filename: product.images[i].path.split('/').last.split('.').first,
           ),
       ];
+    } else if (product.imageUrls.isEmpty) {
+      data['media'] = [];
     }
 
     await dio.post(

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 class SimpleProduct {
+  bool active;
   String id;
   String name;
   int stock;
@@ -32,6 +33,7 @@ class SimpleProduct {
     this.number,
     this.tax,
     List<File> images,
+    this.active,
   }) {
     this.images = images ?? [];
     this.id = this.id ?? Uuid().v4().replaceAll('-', '');
@@ -46,6 +48,7 @@ class SimpleProduct {
       number: data['productNumber'],
       price: data['price'],
       tax: data['tax'],
+      active: data['active'] == true || data['active'] == 1,
     );
 
     if (data['media'] != null) {
@@ -75,6 +78,7 @@ class SimpleProduct {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> data = {
+      'active': active ? 1 : 0,
       'id': id,
       'stock': stock,
       'tax': tax,
