@@ -62,6 +62,10 @@ class LoginService {
 
     final prefs = await SharedPreferences.getInstance();
 
+    if (!prefs.containsKey('contextToken')) {
+      return false;
+    }
+
     final authorityProvider =
         Provider.of<AuthorityProvider>(context, listen: false);
 
@@ -72,7 +76,7 @@ class LoginService {
 
     accessData.companyName = prefs.getString('companyName');
 
-    return prefs.containsKey("contextToken");
+    return true;
   }
 
   void logout(BuildContext context) async {

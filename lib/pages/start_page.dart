@@ -23,11 +23,13 @@ class _StartPageState extends State<StartPage> {
     return FutureBuilder(
       future: _isLoggedIn,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData && snapshot.data) {
-          return ImportPage();
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
-        return LoginPage();
+        return snapshot.data ? ImportPage() : LoginPage();
       },
     );
   }
