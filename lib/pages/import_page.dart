@@ -38,8 +38,11 @@ class _ImportPageState extends State<ImportPage> {
   final _focusNodeDescription = FocusNode();
   final _focusNodeStock = FocusNode();
   bool autoValidate = false;
+  PageController pageController = PageController();
 
-  File _image;
+  List<File> _images = [];
+  List<String> _imageUrls = [];
+
   String id;
   num _taxRate;
 
@@ -61,11 +64,24 @@ class _ImportPageState extends State<ImportPage> {
         _priceController.text = product.price?.toString() ?? '';
         _taxRate = product.tax;
         setState(() {
-          _image = product.image;
+          _images = product.images ?? [];
+          _imageUrls = product.imageUrls ?? [];
           autoValidate = true;
         });
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _taxController.dispose();
+    _productNumberController.dispose();
+    _stockController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    _nameController.dispose();
+    pageController.dispose();
   }
 
   @override
@@ -237,44 +253,103 @@ class _ImportPageState extends State<ImportPage> {
                 SizedBox(
                   height: 20,
                 ),
-                if (_image != null)
+                if (_imageUrls.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
+                    padding: EdgeInsets.only(bottom: 20),
                     child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Theme.of(context)
-                                .inputDecorationTheme
-                                .border
-                                .borderSide
-                                .color),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      width: double.infinity,
-                      child: AspectRatio(
-                        aspectRatio: 291 / 144,
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.file(
-                                    _image,
-                                    fit: BoxFit.fitWidth,
+                      height: MediaQuery.of(context).size.height / 291 * 100,
+                      child: PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        controller: pageController,
+                        itemCount: _imageUrls.length,
+                        itemBuilder: (context, index) => Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .border
+                                    .borderSide
+                                    .color),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          width: double.infinity,
+                          child: AspectRatio(
+                            aspectRatio: 291 / 144,
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child: Image.network(
+                                        _imageUrls[index],
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        _imageUrls.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () {
-                                  setState(() {
-                                    _image = null;
-                                  });
-                                },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (_images.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 291 * 100,
+                      child: PageView.builder(
+                        scrollDirection: Axis.horizontal,
+                        controller: pageController,
+                        itemCount: _images.length,
+                        itemBuilder: (context, index) => Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .border
+                                    .borderSide
+                                    .color),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          width: double.infinity,
+                          child: AspectRatio(
+                            aspectRatio: 291 / 144,
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child: Image.file(
+                                        _images[index],
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        _images.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -313,16 +388,68 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
+  Future<bool> removeImagesDialog({bool replace = false}) async {
+    if (_imageUrls.isEmpty) {
+      return true;
+    }
+
+    final response = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(replace ? "Replace images" : "Remove images"),
+        contentTextStyle: TextStyle(color: Colors.black),
+        content: Text(replace
+            ? 'Continue and replace all existing images?'
+            : 'Continue and remove all existing images?'),
+        actions: <Widget>[
+          FlatButton(
+            textColor: Theme.of(context).accentColor,
+            child: Text('Confirm'),
+            autofocus: true,
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+          FlatButton(
+            textColor: Theme.of(context).accentColor,
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+        ],
+      ),
+    );
+
+    if (response != true) {
+      return false;
+    }
+
+    setState(() {
+      _imageUrls = [];
+    });
+
+    return true;
+  }
+
   Future getImage() async {
+    final response = await removeImagesDialog(replace: true);
+
+    if (!response) {
+      return;
+    }
+
     final image = await ImagePicker.pickImage(
       source: ImageSource.camera,
       // todo max width/height/quality?
       imageQuality: 30,
     );
 
-    setState(() {
-      _image = image;
-    });
+    if (image != null) {
+      setState(() {
+        _images.add(image);
+      });
+    }
   }
 
   void save() async {
@@ -347,7 +474,7 @@ class _ImportPageState extends State<ImportPage> {
       ..stock = int.parse(_stockController.text)
       ..tax = _taxRate
       ..description = _descriptionController.text
-      ..image = _image;
+      ..images = _images;
 
     final result = await showDialog(
       context: context,
@@ -395,7 +522,8 @@ class _ImportPageState extends State<ImportPage> {
     _stockController.text = '';
     setState(() {
       id = null;
-      _image = null;
+      _images = [];
+      _imageUrls = [];
       autoValidate = false;
       _taxRate = null;
     });
@@ -437,9 +565,11 @@ class _ImportPageState extends State<ImportPage> {
 
   Widget _errorModalWidget(BuildContext context, DioError error) {
     final response = error.response.data;
+    print(response);
 
-    List errors =
-        response['errors'].map((error) => error['detail'].toString()).toList();
+    List errors = [response.toString()];
+//    List errors =
+//        response['errors'].map((error) => error['detail'].toString()).toList();
 
     return Column(
       mainAxisSize: MainAxisSize.min,

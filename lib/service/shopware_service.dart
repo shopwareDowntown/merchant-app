@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class ShopwareService {
   static ShopwareService _instance;
   final Dio dio;
-  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
+  static const BASE_URL = 'https://portal.sw-ag.dev'; // TODO? Correct url
   static const API_VERSION = 1; // TODO? Correct url
 
   ShopwareService._internal()
@@ -67,12 +67,12 @@ class ShopwareService {
     final data = product.toMap();
 
     if (product.hasMedia) {
-      final image = product.image;
       data["media"] = [
-        await MultipartFile.fromFile(
-          image.path,
-          filename: image.path.split('/').last.split('.').first,
-        )
+        for (int i = 0; i < product.images.length; i++)
+          await MultipartFile.fromFile(
+            product.images[i].path,
+            filename: product.images[i].path.split('/').last.split('.').first,
+          ),
       ];
     }
 

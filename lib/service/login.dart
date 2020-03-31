@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService {
-  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
+  static const BASE_URL = 'https://portal.sw-ag.dev'; // TODO? Correct url
 
   Future<bool> login(
     BuildContext context,

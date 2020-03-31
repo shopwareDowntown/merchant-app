@@ -11,9 +11,8 @@ class SimpleProduct {
   String number;
   num price;
   num tax;
-  File _image;
-  String _imageUrl;
-  String _mediaId;
+  List<File> images = [];
+  List<String> imageUrls = [];
   bool _isNew = true;
 
   set isNew(bool value) {
@@ -22,14 +21,7 @@ class SimpleProduct {
 
   bool get isNew => _isNew || id == null;
 
-  set image(File image) {
-    _image = image;
-    _mediaId = image != null ? Uuid().v4().replaceAll('-', '') : null;
-  }
-
-  File get image => _image;
-  String get mediaId => _mediaId;
-  bool get hasMedia => mediaId != null;
+  bool get hasMedia => images.isNotEmpty;
 
   SimpleProduct({
     this.id,
@@ -39,9 +31,9 @@ class SimpleProduct {
     this.price,
     this.number,
     this.tax,
-    File image,
+    List<File> images,
   }) {
-    this.image = image;
+    this.images = images ?? [];
     this.id = this.id ?? Uuid().v4().replaceAll('-', '');
   }
 
@@ -56,24 +48,29 @@ class SimpleProduct {
       tax: data['tax'],
     );
 
-    product._imageUrl = data['media'];
+    if (data['media'] != null) {
+      product.imageUrls = List<String>.from(data['media']);
+    }
+
     product._isNew = false;
 
     return product;
   }
 
-  Widget imageWidget(BuildContext context) {
+  Iterable<Widget> imageWidget(BuildContext context) {
     if (hasMedia) {
-      return Image.file(_image);
+      return images.map<Widget>((image) => Image.file(image));
     }
 
-    if (_imageUrl != null) {
-      return Image.network(_imageUrl);
+    if (imageUrls.isNotEmpty) {
+      return imageUrls.map((imageUrl) => Image.network(imageUrl));
     }
 
-    return Container(
-      child: Text('TODO'),
-    );
+    return [
+      Container(
+        child: Text('TODO'),
+      )
+    ];
   }
 
   Map<String, dynamic> toMap() {

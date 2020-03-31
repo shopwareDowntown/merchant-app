@@ -27,7 +27,7 @@ class ProductListTile extends StatelessWidget {
                       .borderSide
                       .color),
             ),
-            child: Center(child: product.imageWidget(context)),
+            child: Center(child: product.imageWidget(context).first),
           ),
         ),
         trailing: Container(
