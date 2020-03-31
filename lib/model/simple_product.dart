@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 class SimpleProduct {
+  static const PRODUCT_TYPE = 'product';
+
   bool active;
   String id;
   String name;
@@ -12,6 +14,7 @@ class SimpleProduct {
   String number;
   num price;
   num tax;
+  String productType;
   List<File> images = [];
   List<String> imageUrls = [];
   bool _isNew = true;
@@ -32,6 +35,7 @@ class SimpleProduct {
     this.price,
     this.number,
     this.tax,
+    this.productType,
     List<File> images,
     this.active,
   }) {
@@ -40,6 +44,7 @@ class SimpleProduct {
   }
 
   factory SimpleProduct.fromJson(Map<String, dynamic> data) {
+    // TODO: Refactor --> Factory for other product types
     final product = SimpleProduct(
       id: data['id'],
       name: data['name'],
@@ -48,6 +53,7 @@ class SimpleProduct {
       number: data['productNumber'],
       price: data['price'],
       tax: data['tax'],
+      productType: data['productType'],
       active: data['active'] == true || data['active'] == 1,
     );
 
@@ -86,7 +92,7 @@ class SimpleProduct {
       'description': description,
       'price': price,
       'productNumber': number,
-      'productType': 'product',
+      'productType': productType,
     };
 
     return data;

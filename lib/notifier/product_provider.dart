@@ -3,7 +3,9 @@ import 'package:product_import_app/model/simple_product.dart';
 
 class ProductProvider extends ChangeNotifier {
   List<SimpleProduct> _products = [];
-  List<SimpleProduct> get products => _products;
+  List<SimpleProduct> get products => _products
+      .where((product) => product.productType == SimpleProduct.PRODUCT_TYPE)
+      .toList();
 
   void setProducts(List<SimpleProduct> products) {
     this._products = products;
