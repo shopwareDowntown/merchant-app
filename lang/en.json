@@ -11,6 +11,9 @@
   "requiredField": "Required field",
   "save": "Save",
   "close": "Close",
+  "cancel": "Cancel",
+  "replace": "Replace",
+  "remove": "Remove",
   "scan": "Scan barcode",
   "productName": "Product Name",
   "productNumber": "Product Nummer",
@@ -27,5 +30,6 @@
   "numberOnlyField": "Invalid Value",
   "productWillBeImported": "The Product will be imported ... ",
   "successfulImport": "The Product was successfully imported!",
-  "createAdditional": "Import additional Product"
+  "createAdditional": "Import additional Product",
+  "active": "Active"
 }
