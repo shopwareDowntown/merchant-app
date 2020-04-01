@@ -1,4 +1,4 @@
-package com.shopware.product_import_app
+package com.shopware.downtown_merchant_app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

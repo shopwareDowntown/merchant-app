@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class EanService {
   Future<Map> fetchInformation(String eanCode) async {
-    Response response = await Dio().post("https://gtin.hoelshare.com/$eanCode");
+    Response response = await Dio().post("https://gtin.downtowns.io/$eanCode");
 
     if (response.statusCode != 200) {
       throw 'The response code is not valid';

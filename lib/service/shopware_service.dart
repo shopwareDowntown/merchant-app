@@ -1,24 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:downtown_merchant_app/model/authority.dart';
+import 'package:downtown_merchant_app/model/simple_product.dart';
+import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
+import 'package:downtown_merchant_app/notifier/authority_provider.dart';
+import 'package:downtown_merchant_app/notifier/product_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:product_import_app/model/authority.dart';
-import 'package:product_import_app/model/simple_product.dart';
-import 'package:product_import_app/notifier/access_data_provider.dart';
-import 'package:product_import_app/notifier/authority_provider.dart';
-import 'package:product_import_app/notifier/product_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopwareService {
   static ShopwareService _instance;
   final Dio dio;
-  static const BASE_URL = 'https://portal.sw-ag.dev'; // TODO? Correct url
+  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
   static const API_VERSION = 1; // TODO? Correct url
 
   ShopwareService._internal()
-      : dio =
-            Dio(BaseOptions(baseUrl: "$BASE_URL/merchant-api/v$API_VERSION")) {
-    // todo add interceptor for refreshing token if invalid
-    // todo set base options accept / authorization
-  }
+      : dio = Dio(BaseOptions(baseUrl: "$BASE_URL/merchant-api/v$API_VERSION"));
 
   factory ShopwareService() {
     if (_instance == null) {

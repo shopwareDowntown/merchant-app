@@ -1,5 +1,5 @@
+import 'package:downtown_merchant_app/model/authority.dart';
 import 'package:flutter/material.dart';
-import 'package:product_import_app/model/authority.dart';
 
 class AccessDataChangeNotifier extends ChangeNotifier {
   String _contextToken;
