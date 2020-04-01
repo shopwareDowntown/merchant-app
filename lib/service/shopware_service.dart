@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 class ShopwareService {
   static ShopwareService _instance;
   final Dio dio;
-  static const BASE_URL = 'https://sw6.ovh'; // TODO? Correct url
-  static const API_VERSION = 1; // TODO? Correct url
+  static const BASE_URL = 'https://api.downtowns.io';
+  static const API_VERSION = 1;
 
   ShopwareService._internal()
       : dio = Dio(BaseOptions(baseUrl: "$BASE_URL/merchant-api/v$API_VERSION"));
