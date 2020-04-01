@@ -1,13 +1,10 @@
 import 'package:downtown_merchant_app/icon/shopware_icons.dart';
-import 'package:downtown_merchant_app/model/authority.dart';
-import 'package:downtown_merchant_app/notifier/authority_provider.dart';
 import 'package:downtown_merchant_app/pages/import_page.dart';
 import 'package:downtown_merchant_app/service/app_localizations.dart';
 import 'package:downtown_merchant_app/service/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,18 +18,14 @@ class LoginState extends State<LoginPage> {
   bool _isError = false;
   bool _isLogginIn = false;
   final _formKey = GlobalKey<FormState>();
-  final _authorityFocus = FocusNode();
   final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
-  Authority _authority;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
-    final authorityProvider =
-        Provider.of<AuthorityProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,41 +50,6 @@ class LoginState extends State<LoginPage> {
                     key: _formKey,
                     child: Column(
                       children: <Widget>[
-                        DropdownButtonFormField(
-                          value: _authority,
-                          hint: Text(localization.translate("authorityLabel")),
-                          items: authorityProvider.authorities
-                              .map<DropdownMenuItem<Authority>>((authority) {
-                            return DropdownMenuItem<Authority>(
-                              value: authority,
-                              child: Text(authority.name),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _authority = value;
-                            });
-                            _fieldFocusChange(
-                              context,
-                              _authorityFocus,
-                              _usernameFocus,
-                            );
-                          },
-                          isExpanded: true,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 16),
-                          ),
-                          validator: (Authority value) {
-                            if (value == null) {
-                              return localization
-                                  .translate("authorityValidationEmpty");
-                            }
-
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: 20),
                         TextFormField(
                           autocorrect: false,
                           focusNode: _usernameFocus,
@@ -229,7 +187,6 @@ class LoginState extends State<LoginPage> {
 
       final wasSuccessful = await _loginService.login(
         context,
-        _authority,
         _usernameController.text,
         _passwordController.text,
       );

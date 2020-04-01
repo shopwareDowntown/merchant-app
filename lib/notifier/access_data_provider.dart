@@ -1,9 +1,7 @@
-import 'package:downtown_merchant_app/model/authority.dart';
 import 'package:flutter/material.dart';
 
 class AccessDataChangeNotifier extends ChangeNotifier {
   String _contextToken;
-  Authority _authority;
   String _companyName;
   bool _initialized = false;
 
@@ -20,14 +18,10 @@ class AccessDataChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Authority get authority => _authority;
-
   void update({
     String contextToken,
-    Authority authority,
   }) {
     this._contextToken = contextToken ?? this._contextToken;
-    this._authority = authority ?? this._authority;
 
     this._initialized = true;
 
@@ -36,7 +30,6 @@ class AccessDataChangeNotifier extends ChangeNotifier {
 
   void reset() {
     this._contextToken = null;
-    this._authority = null;
     this._companyName = null;
 
     this._initialized = false;

@@ -35,7 +35,7 @@ class SimpleProduct {
     this.price,
     this.number,
     this.tax,
-    this.productType,
+    this.productType = PRODUCT_TYPE,
     List<File> images,
     this.active,
   }) {

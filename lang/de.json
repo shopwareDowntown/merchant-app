@@ -1,7 +1,5 @@
 {
   "loginPageTitle": "Login",
-  "authorityLabel": "Organization",
-  "authorityValidationEmpty": "Bitte wähle deine Orginazation aus.",
   "usernameLabel": "Dein Benutzername",
   "usernameValidationEmpty": "Bitte gebe deinen Benutzernamen an.",
   "passwordLabel": "Dein Passwort",

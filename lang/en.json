@@ -1,7 +1,5 @@
 {
   "loginPageTitle": "Login",
-  "authorityLabel": "Authority",
-  "authorityValidationEmpty": "Please select your authority.",
   "usernameLabel": "Your username",
   "usernameValidationEmpty": "Please enter your username.",
   "passwordLabel": "Your password",

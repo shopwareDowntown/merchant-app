@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:downtown_merchant_app/model/authority.dart';
 import 'package:downtown_merchant_app/model/simple_product.dart';
 import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
-import 'package:downtown_merchant_app/notifier/authority_provider.dart';
 import 'package:downtown_merchant_app/notifier/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +34,6 @@ class ShopwareService {
         contentType: 'application/json',
         headers: {
           'Accept': 'application/json',
-          "sw-access-key": accessData.authority.accessKey,
           "sw-context-token": accessData.contextToken,
         },
       ),
@@ -105,28 +102,8 @@ class ShopwareService {
     return Options(
       headers: {
         'Accept': 'application/json',
-        "sw-access-key": accessData.authority.accessKey,
         "sw-context-token": accessData.contextToken,
       },
     );
-  }
-
-  Future<List<Authority>> getAuthorities(BuildContext context) async {
-    final authorityProvider =
-        Provider.of<AuthorityProvider>(context, listen: false);
-
-    if (authorityProvider.hasAuthorities) {
-      return authorityProvider.authorities;
-    }
-
-    final response = await dio.get("/authorities");
-    final List authoritiesData = response.data;
-    final List<Authority> authorities = authoritiesData
-        .map((authorityData) => Authority.fromJson(authorityData))
-        .toList();
-
-    authorityProvider.setAuthorities(authorities);
-
-    return authorities;
   }
 }

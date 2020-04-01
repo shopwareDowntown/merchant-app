@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:downtown_merchant_app/model/authority.dart';
 import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
-import 'package:downtown_merchant_app/notifier/authority_provider.dart';
 import 'package:downtown_merchant_app/service/shopware_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -12,32 +10,26 @@ class LoginService {
 
   Future<bool> login(
     BuildContext context,
-    Authority authority,
     String username,
     String password,
   ) async {
     try {
-      Response response =
-          await Dio().post(BASE_URL + "/sales-channel-api/v1/customer/login",
-              data: {
-                "username": username,
-                "password": password,
-              },
-              options: Options(
-                headers: {"sw-access-key": authority.accessKey},
-              ));
+      Response response = await Dio().post(
+        BASE_URL + "/merchant-api/v1/login",
+        data: {
+          "email": username,
+          "password": password,
+        },
+      );
 
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
 
-        await prefs.setString("authorityId", authority.id);
-        await prefs.setString("accessKey", authority.accessKey);
         await prefs.setString(
             "contextToken", response.data["sw-context-token"]);
 
         Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
           contextToken: response.data["sw-context-token"],
-          authority: authority,
         );
 
         final companyName = await ShopwareService().getCompanyName(context);
@@ -58,7 +50,6 @@ class LoginService {
     if (accessData.hasData && accessData.isLoggedIn) {
       return true;
     }
-    await ShopwareService().getAuthorities(context);
 
     final prefs = await SharedPreferences.getInstance();
 
@@ -66,12 +57,8 @@ class LoginService {
       return false;
     }
 
-    final authorityProvider =
-        Provider.of<AuthorityProvider>(context, listen: false);
-
     accessData.update(
       contextToken: prefs.getString('contextToken'),
-      authority: authorityProvider.getById(prefs.getString('authorityId')),
     );
 
     accessData.companyName = prefs.getString('companyName');
@@ -82,6 +69,18 @@ class LoginService {
   void logout(BuildContext context) async {
     final accessData =
         Provider.of<AccessDataChangeNotifier>(context, listen: false);
+
+    try {
+      await Dio().post(
+        BASE_URL + "/merchant-api/v1/logout",
+        options: Options(headers: {
+          'sw-context-token': accessData.contextToken,
+        }),
+      );
+    } catch (e) {
+      // ignore
+    }
+
     accessData.reset();
 
     final prefs = await SharedPreferences.getInstance();
