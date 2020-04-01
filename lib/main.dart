@@ -1,5 +1,4 @@
 import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
-import 'package:downtown_merchant_app/notifier/authority_provider.dart';
 import 'package:downtown_merchant_app/notifier/product_provider.dart';
 import 'package:downtown_merchant_app/pages/start_page.dart';
 import 'package:downtown_merchant_app/service/app_localizations.dart';
@@ -17,12 +16,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AccessDataChangeNotifier()),
         ChangeNotifierProvider(create: (context) => ProductProvider()),
-        ChangeNotifierProvider(
-          create: (context) => AuthorityProvider(),
-        ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Downtown Merchant',
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
