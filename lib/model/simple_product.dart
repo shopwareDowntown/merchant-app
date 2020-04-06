@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:downtown_merchant_app/model/media.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,7 +17,7 @@ class SimpleProduct {
   num tax;
   String productType;
   List<File> images = [];
-  List<String> imageUrls = [];
+  List<RemoteMedia> imageUrls = [];
   bool _isNew = true;
 
   set isNew(bool value) {
@@ -58,7 +59,13 @@ class SimpleProduct {
     );
 
     if (data['media'] != null) {
-      product.imageUrls = List<String>.from(data['media']);
+      if (data['media'][0] is String) {
+        product.imageUrls = List.generate(data['media'].length,
+            (index) => RemoteMedia(url: data['media'][index]));
+      } else {
+        product.imageUrls = List.generate(data['media'].length,
+            (index) => RemoteMedia.fromJson(data['media'][index]));
+      }
     }
 
     product._isNew = false;
@@ -72,7 +79,7 @@ class SimpleProduct {
     }
 
     if (imageUrls.isNotEmpty) {
-      return imageUrls.map((imageUrl) => Image.network(imageUrl));
+      return imageUrls.map((remoteImage) => Image.network(remoteImage.url));
     }
 
     return [Container()];
