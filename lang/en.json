@@ -14,7 +14,7 @@
   "remove": "Remove",
   "scan": "Scan barcode",
   "productName": "Product Name",
-  "productNumber": "Product Nummer",
+  "productNumber": "Product Number",
   "productPrice": "Price",
   "productStock": "In Stock",
   "productTax": "Taxrate",
@@ -29,5 +29,10 @@
   "productWillBeImported": "The Product will be imported ... ",
   "successfulImport": "The Product was successfully imported!",
   "createAdditional": "Import additional Product",
-  "active": "Active"
+  "active": "Active",
+  "removeImages": "Remove Images?",
+  "replaceImages": "Replace Images?",
+  "replaceImagesContent": "Continue and replace all existing images?",
+  "removeImagesContent": "Continue and remove all existing images?",
+  "STOREFRONT__MEDIA_ILLEGAL_FILE_TYPE": "The uploaded File is not allowed, please update your App!"
 }

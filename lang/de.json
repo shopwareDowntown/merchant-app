@@ -1,9 +1,9 @@
 {
   "loginPageTitle": "Login",
   "usernameLabel": "Dein Benutzername",
-  "usernameValidationEmpty": "Bitte gebe deinen Benutzernamen an.",
+  "usernameValidationEmpty": "Bitte gib deinen Benutzernamen an.",
   "passwordLabel": "Dein Passwort",
-  "passwordValidationEmpty": "Bitte gebe dein Passwort an.",
+  "passwordValidationEmpty": "Bitte gib dein Passwort an.",
   "loginButtonLabel": "Login",
   "loginError": "Du konntest nicht erfolgreich eingeloggt werden. Stelle sicher, dass die Zugangsdaten korrekt sind.",
   "requiredField": "Pflichtfeld",
@@ -29,9 +29,10 @@
   "productWillBeImported": "Das Produkt wird importiert ... ",
   "successfulImport": "Das Produkt wurde erfolgreich importiert!",
   "createAdditional": "Weiteres Produkt anlegen",
-  "active": "Atkiv",
+  "active": "Aktiv",
   "removeImages": "Bilder entfernen",
   "replaceImages": "Bilder ersetzen",
   "replaceImagesContent": "Fortfahren und alle existierenden Bilder ersetzen?",
-  "removeImagesContent": "Fortfahren und alle existierenden Bilder entfernen?"
+  "removeImagesContent": "Fortfahren und alle existierenden Bilder entfernen?",
+  "STOREFRONT__MEDIA_ILLEGAL_FILE_TYPE": "Das hochgeladene Bild wurde abgelehnt, bitte aktualisiere die App!"
 }

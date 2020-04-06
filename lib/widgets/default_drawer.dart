@@ -12,6 +12,7 @@ class DefaultDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
+    final accessData = Provider.of<AccessDataChangeNotifier>(context);
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -22,15 +23,23 @@ class DefaultDrawer extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.person,
-                      size: 50,
-                    ),
+                    accessData.companyCover != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: Container(
+                              width: 50,
+                              child: Image.network(accessData.companyCover),
+                            ),
+                          )
+                        : Icon(
+                            Icons.person,
+                            size: 50,
+                          ),
                     SizedBox(
                       width: 10,
                     ),
                     Text(
-                      "${Provider.of<AccessDataChangeNotifier>(context).companyName}",
+                      "${accessData.companyName}",
                       style: Theme.of(context).textTheme.headline,
                     ),
                   ],
@@ -122,15 +131,15 @@ class DefaultDrawer extends StatelessWidget {
                   textColor: Theme.of(context).accentColor,
                   icon: Icon(ShopwareIcons.logout),
                   onPressed: () {
-                    LoginService().logout(context);
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StartPage(),
-                      ),
-                      (route) => false,
-                    );
+                    LoginService().logout(context).then((_) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StartPage(),
+                        ),
+                        (route) => false,
+                      );
+                    });
                   },
                 ),
               ),

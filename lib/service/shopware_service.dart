@@ -64,11 +64,9 @@ class ShopwareService {
         for (int i = 0; i < product.images.length; i++)
           await MultipartFile.fromFile(
             product.images[i].path,
-            filename: product.images[i].path.split('/').last.split('.').first,
+            filename: product.images[i].path.split('/').last,
           ),
       ];
-    } else if (product.imageUrls.isEmpty) {
-      data['media'] = [];
     }
 
     await dio.post(
@@ -82,7 +80,7 @@ class ShopwareService {
     return true;
   }
 
-  Future<String> getCompanyName(BuildContext context) async {
+  Future<void> loadCompanyInfo(BuildContext context) async {
     final accessData = Provider.of<AccessDataChangeNotifier>(
       context,
       listen: false,
@@ -95,7 +93,9 @@ class ShopwareService {
     final companyName = response.data['publicCompanyName'];
     accessData.companyName = companyName;
 
-    return companyName;
+    if (response.data['cover'] != null) {
+      accessData.companyCover = response.data['cover']['url'];
+    }
   }
 
   Options _authorizedOptions(AccessDataChangeNotifier accessData) {

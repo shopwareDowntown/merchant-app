@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AccessDataChangeNotifier extends ChangeNotifier {
   String _contextToken;
   String _companyName;
+  String _companyCover;
   bool _initialized = false;
 
   bool get hasData => _initialized;
@@ -11,9 +12,16 @@ class AccessDataChangeNotifier extends ChangeNotifier {
 
   String get contextToken => _contextToken;
   String get companyName => _companyName;
+  String get companyCover => _companyCover;
 
   set companyName(String value) {
     this._companyName = value;
+
+    notifyListeners();
+  }
+
+  set companyCover(String value) {
+    this._companyCover = value;
 
     notifyListeners();
   }
@@ -31,6 +39,7 @@ class AccessDataChangeNotifier extends ChangeNotifier {
   void reset() {
     this._contextToken = null;
     this._companyName = null;
+    this._companyCover = null;
 
     this._initialized = false;
 

@@ -28,12 +28,15 @@ class LoginService {
         await prefs.setString(
             "contextToken", response.data["sw-context-token"]);
 
-        Provider.of<AccessDataChangeNotifier>(context, listen: false).update(
+        final accessData =
+            Provider.of<AccessDataChangeNotifier>(context, listen: false);
+        accessData.update(
           contextToken: response.data["sw-context-token"],
         );
 
-        final companyName = await ShopwareService().getCompanyName(context);
-        await prefs.setString("companyName", companyName);
+        await ShopwareService().loadCompanyInfo(context);
+        await prefs.setString("companyName", accessData.companyName);
+        await prefs.setString("companyCover", accessData.companyCover);
 
         return true;
       }
@@ -62,11 +65,12 @@ class LoginService {
     );
 
     accessData.companyName = prefs.getString('companyName');
+    accessData.companyCover = prefs.getString('companyCover');
 
     return true;
   }
 
-  void logout(BuildContext context) async {
+  Future logout(BuildContext context) async {
     final accessData =
         Provider.of<AccessDataChangeNotifier>(context, listen: false);
 
@@ -81,11 +85,12 @@ class LoginService {
       // ignore
     }
 
-    accessData.reset();
-
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.remove("contextToken");
     await prefs.remove('companyName');
+    await prefs.remove('companyCover');
+
+    accessData.reset();
   }
 }
