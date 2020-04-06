@@ -7,6 +7,7 @@ import 'package:downtown_merchant_app/model/simple_product.dart';
 import 'package:downtown_merchant_app/notifier/product_provider.dart';
 import 'package:downtown_merchant_app/service/app_localizations.dart';
 import 'package:downtown_merchant_app/service/ean.dart';
+import 'package:downtown_merchant_app/service/error.dart';
 import 'package:downtown_merchant_app/service/shopware_service.dart';
 import 'package:downtown_merchant_app/widgets/default_drawer.dart';
 import 'package:flutter/material.dart';
@@ -596,10 +597,10 @@ class _ImportPageState extends State<ImportPage> {
 
   Widget _errorModalWidget(BuildContext context, DioError error) {
     final response = error.response.data;
-
-    List errors = [response.toString()];
-//    List errors =
-//        response['errors'].map((error) => error['detail'].toString()).toList();
+    List errors = ErrorService.translate(
+      context,
+      response['errors'],
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
