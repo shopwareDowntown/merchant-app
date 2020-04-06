@@ -34,5 +34,7 @@
   "replaceImages": "Replace Images?",
   "replaceImagesContent": "Continue and replace all existing images?",
   "removeImagesContent": "Continue and remove all existing images?",
-  "STOREFRONT__MEDIA_ILLEGAL_FILE_TYPE": "The uploaded File is not allowed, please update your App!"
+  "STOREFRONT__MEDIA_ILLEGAL_FILE_TYPE": "The uploaded File is not allowed, please update your App!",
+  "removeImage": "Delete Image",
+  "removeImageContent": "Are you sure you want to delete this image?"
 }

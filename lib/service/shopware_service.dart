@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:downtown_merchant_app/model/media.dart';
 import 'package:downtown_merchant_app/model/simple_product.dart';
 import 'package:downtown_merchant_app/notifier/access_data_provider.dart';
 import 'package:downtown_merchant_app/notifier/product_provider.dart';
@@ -95,6 +96,21 @@ class ShopwareService {
 
     if (response.data['cover'] != null) {
       accessData.companyCover = response.data['cover']['url'];
+    }
+  }
+
+  Future deleteProductImage(
+      BuildContext context, String productId, RemoteMedia media) async {
+    final accessData = Provider.of<AccessDataChangeNotifier>(
+      context,
+      listen: false,
+    );
+
+    try {
+      await dio.delete('/products/$productId/media/${media.id}',
+          options: _authorizedOptions(accessData));
+    } catch (e) {
+      // ignore
     }
   }
 

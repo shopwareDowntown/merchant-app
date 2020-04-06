@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:dio/dio.dart';
 import 'package:downtown_merchant_app/icon/shopware_icons.dart';
+import 'package:downtown_merchant_app/model/media.dart';
 import 'package:downtown_merchant_app/model/simple_product.dart';
 import 'package:downtown_merchant_app/notifier/product_provider.dart';
 import 'package:downtown_merchant_app/service/app_localizations.dart';
@@ -43,7 +44,7 @@ class _ImportPageState extends State<ImportPage> {
   PageController pageController = PageController();
 
   List<File> _images = [];
-  List<String> _imageUrls = [];
+  List<RemoteMedia> _imageUrls = [];
 
   String id;
   num _taxRate;
@@ -297,7 +298,7 @@ class _ImportPageState extends State<ImportPage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(4),
                                       child: Image.network(
-                                        _imageUrls[index],
+                                        _imageUrls[index].url,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     ),
@@ -305,7 +306,14 @@ class _ImportPageState extends State<ImportPage> {
                                   IconButton(
                                     icon: Icon(Icons.close),
                                     onPressed: () {
-                                      removeImagesDialog();
+                                      if (_imageUrls[index].id != null) {
+                                        removeImageDialog(
+                                          id,
+                                          _imageUrls[index],
+                                        );
+                                      } else {
+                                        removeImagesDialog();
+                                      }
                                     },
                                   ),
                                 ],
@@ -399,6 +407,50 @@ class _ImportPageState extends State<ImportPage> {
         ),
       ),
     );
+  }
+
+  Future<bool> removeImageDialog(
+      String productId, RemoteMedia remoteImage) async {
+    final localization = AppLocalizations.of(context);
+    final response = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(localization.translate('removeImage')),
+        contentTextStyle: TextStyle(color: Colors.black),
+        content: Text(
+          localization.translate('removeImageContent'),
+        ),
+        actions: <Widget>[
+          OutlineButton(
+            textColor: Theme.of(context).accentColor,
+            child: Text(localization.translate('cancel')),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          RaisedButton(
+            color: Theme.of(context).errorColor,
+            child: Text(localization.translate('remove')),
+            autofocus: true,
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
+        ],
+      ),
+    );
+
+    if (response != true) {
+      return false;
+    }
+
+    await ShopwareService().deleteProductImage(context, productId, remoteImage);
+
+    setState(() {
+      _imageUrls.remove(remoteImage);
+    });
+
+    return true;
   }
 
   Future<bool> removeImagesDialog({bool replace = false}) async {
